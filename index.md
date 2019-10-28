@@ -85,16 +85,16 @@
 
                     <ul class="si-hr-mu__list">
                         <li class="si-hr-mu__item">
-                            <a class="si-hr-mu__link" href="/about" tabindex="1">About</a>
+                            <a class="si-hr-mu__link" href="/about.html" tabindex="1">About</a>
                         </li>
                         <li class="si-hr-mu__item">
-                            <a class="si-hr-mu__link" href="/contact" tabindex="1">Contact Us</a>
+                            <a class="si-hr-mu__link" href="/contact.html" tabindex="1">Contact Us</a>
                         </li>
                         <li class="si-hr-mu__item">
                             <a class="si-hr-mu__link" href="/reading-groups" tabindex="1">Reading Groups</a>
                         </li>
                         <li class="si-hr-mu__item">
-                            <a class="si-hr-mu__link" href="/advertise" tabindex="1">Advertise</a>
+                            <a class="si-hr-mu__link" href="/advertise.html" tabindex="1">Advertise</a>
                         </li>
                     </ul>
                 </div>

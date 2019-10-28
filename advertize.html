@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="main.css" />
+    <link rel="stylesheet" type="text/css" href="overrides.css" />
+    <meta charset="UTF-8"/>
+    <title>Bolshevik</title>
+</head>
+
+<body>
+<div id="page-helper">
+    <!-- this is here for Vue to bind to! Don't remove! -->
+</div>
+
+<header class="si-hr prt-x" id="site-header">
+    <div class="si-hr__container">
+
+        <!-- Logo -->
+
+        <div class="si-hr-lo">
+            <a class="si-hr-lo__container" href="https://paradoink.github.io/index.html" tabindex="1">
+
+
+                <h1 style="margin-left: 50px;">Bolshevik</h1>
+            </a>
+        </div>
+
+        <!-- Links -->
+
+
+
+        <ul class="si-hr-lk si-hr-lk--po">
+
+            <li class="si-hr-lk__item si-hr-lk__item--1">
+                <a class="si-hr-lk__link" href="https://discord.gg/5SVkfxk">Subscribe</a>
+            </li>
+
+
+            <li class="si-hr-lk__item si-hr-lk__item--2">
+                <a class="si-hr-lk__link" href="https://paradoink.github.io/Magazines/Eco.pdf">Magazine</a>
+            </li>
+            <li class="si-hr-lk__item si-hr-lk__item--3">
+                <a class="si-hr-lk__link" href="/donate">Donate</a>
+            </li>
+            <li class="si-hr-lk__item si-hr-lk__item--4">
+                <a class="si-hr-lk__link" href="http://catalyst-journal.com/">Catalyst</a>
+            </li>
+        </ul>
+
+
+
+    </div>
+
+    <div id="site-menu">
+        <transition name="fadein">
+            <div class="si-hr-mu" v-cloak v-if="menuActive">
+                <div class="si-hr-mu__container">
+                    <ul class="si-hr-mu__list">
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/subscribe" tabindex="1">Subscribe</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/storeissues" tabindex="1">Back Issues</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/donate" tabindex="1">Donate</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/store" tabindex="1">Store</a>
+                        </li>
+                    </ul>
+
+                    <ul class="si-hr-mu__list">
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/issue/war-is-a-racket" id="magazine-link" tabindex="1">Magazine</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/blog" tabindex="1">Blog</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="http://catalyst-journal.com/" tabindex="1">Catalyst</a>
+                        </li>
+                    </ul>
+
+                    <ul class="si-hr-mu__list">
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/about" tabindex="1">About</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/contact" tabindex="1">Contact Us</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/reading-groups" tabindex="1">Reading Groups</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/advertise" tabindex="1">Advertise</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </transition>
+    </div>
+
+
+    <div id="site-login">
+        <transition name="fadein">
+            <div class="si-hr-ln" v-cloak v-if="loginActive || forgotActive">
+
+                <form class="si-hr-ln__form" v-if="loginActive" v-on:submit.prevent="submitLogin">
+                    <div class="si-hr-ln__error" v-if="errors">
+                        {{ errors }}
+                    </div>
+                    <label class="si-hr-ln__label">
+                        Email
+                        <input class="si-hr-ln__field si-hr-ln__field--email" id="login.email" name="email" placeholder tabindex="1" v-model="email"/>
+                    </label>
+                    <label class="si-hr-ln__label">
+                        Password
+                        <input class="si-hr-ln__field si-hr-ln__field--password" id="login.password" name="password" placeholder tabindex="1" type="password" v-model="password"/>
+                    </label>
+                    <a class="si-hr-ln__toggle" role="button" tabindex="1" target="_self" v-on:click="showForgot" v-on:keyup.13="showForgot">
+
+                        <svg class="si-hr-ln__icon" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                            <!-- <defs><style>.cls-1{fill:none;}</style></defs> -->
+                            <title>Forgot Password Icon</title>
+                            <path class="si-hr-ln__icon--circle" d="M20,37.8A17.8,17.8,0,1,1,37.8,20,18,18,0,0,1,20,37.8Z"></path>
+                            <path class="si-hr-ln__icon--question" d="M20.7,19.4c1.3-1.1,2.4-1.6,2.4-3.1s-1.2-2.6-3.2-2.6a4.43,4.43,0,0,0-4.1,2.9l-2.6-1.4A7,7,0,0,1,20,10.7c4,0,6.4,2.2,6.4,5.3a5,5,0,0,1-2.5,4.5c-2.1,1.5-2.6,2-2.6,4.1v.5H18.4v-.7A5,5,0,0,1,20.7,19.4Zm-1,6.7a1.8,1.8,0,1,1-1.8,1.8,1.79,1.79,0,0,1,1.8-1.8Z"></path>
+                        </svg>
+                        <span class="si-hr-ln__forgot">Forgot password?</span>
+                    </a>
+                    <button class="si-hr-ln__submit" tabindex="1" type="submit" v-bind:disabled="querying">
+                        <span>Log in</span>
+                    </button>
+                </form>
+
+                <div class="si-hr-fg" v-cloak v-if="forgotActive">
+                    <div class="si-hr-fg__content">
+                        <div class="si-hr-fg__return">
+                            <a class="si-hr-fg__link" role="button" tabindex="1" v-on:click="showLogin" v-on:keyup.13="showLogin">
+                                ← Back
+                            </a>
+                        </div>
+                        <form action="/forgot" class="si-hr-fg__form" enctype="application/x-www-form-urlencoded" method="post" target="_self">
+                            <label class="si-hr-fg__label">
+                                Enter email to receive password reset link
+                                <input class="si-hr-fg__field" id="forgot.email" name="forgot.email" placeholder tabindex="1" value/>
+                            </label>
+                            <button class="si-hr-fg__submit" tabindex="1" type="submit" v-bind:disabled="querying">
+                                <span>Submit</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </transition>
+    </div>
+
+
+</header>
+
+
+
+<main class="ar" id="archive">
+
+    <div class="ar__container">
+
+
+        <section class="ar-mn">
+
+
+
+            <div class="ar-mn__articles">
+                <h1 class="ar-mn__desc" style="font-size: 60px;">Contact Us</h1>
+
+
+
+
+                <br>
+                <div class="ar-mn__content">
+                    <h1 class="ar-mn__title">
+                        <a>Bolshevik</a>
+                    </h1>
+                    <p class="ar-mn__summary">Join <a style="text-decoration: underline; text-decoration-color:red;"href="https://discord.gg/5SVkfxk">discord.gg/5SVkfxk</a> for advertising inquiries.
+                </div>
+            </div>
+
+            </article>
+
+    </div>
+    </section>
+    </div>
+</main>
+
+
+<footer class="si-fr prt-x">
+
+    <section class="si-fr-ml" id="mailing-list-signup">
+        <h1 class="si-fr-ml__heading">Sign up for our mailing list</h1>
+        <form class="si-fr-ml__form" v-on:submit.prevent="signup">
+            <div class="si-fr-ml__formbox">
+                <input class="si-fr-ml__field" name="email" placeholder="Email Address Here" v-model="email"/>
+                <button class="si-fr-ml__submit" v-bind:disabled="querying">
+                    <span>Submit</span>
+                </button>
+                <p class="si-fr-ml__message" v-cloak v-if="state === 'failure'">This doesn't appear to be a valid email.</p>
+                <p class="si-fr-ml__message" v-cloak v-if="state === 'success'">Thanks for signing up!</p>
+            </div>
+        </form>
+    </section>
+
+    <ul class="si-fr-mu">
+        <li class="si-fr-mu__item">
+            <a class="si-fr-mu__link" href="https://paradoink.github.io/about.html">About Us</a>
+        </li>
+        <li class="si-fr-mu__item">
+            <a class="si-fr-mu__link" href="https://paradoink.github.io/contact.html">Contact Us</a>
+        </li>
+        <li class="si-fr-mu__item">
+            <a class="si-fr-mu__link" href="https://paradoink.github.io/advertise.html">Advertise</a>
+        </li>
+        <li class="si-fr-mu__item">
+            <b>© 2019</b>
+        </li>
+    </ul>
+
+</footer>
+
+<div id="site-archive">
+    <transition name="fadein">
+        <nav class="si-ar" v-cloak v-if="archiveActive">
+            <div class="si-ar__container">
+
+                <form action="/web/20191012173627/https://jacobinmag.com/search" class="si-ar__search" method="get" role="search">
+                    <input class="si-ar__field" name="query" placeholder="Search and hit return" role="searchbox" tabindex="0" type="text"/>
+
+                    <svg class="si-ar__icon" viewbox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                        <title>Search Icon</title>
+                        <circle class="cls-2" cx="24.79" cy="15.21" r="9.3"></circle>
+                        <line class="cls-2" x1="18.28" x2="5.4" y1="21.72" y2="34.6"></line>
+                    </svg>
+                </form>
+
+                <div class="si-ar__taxonomies">
+                    <div class="si-ar__taxonomy">
+                        <h2 class="si-ar__subheading">Categories</h2>
+                        <div class="si-ar__options">
+                            <ul class="si-ar__list">
+                                <li class="si-ar__item si-ar__tx--art"><a href="/web/20191012173627/https://jacobinmag.com/category/art">Art</a></li>
+                                <li class="si-ar__item si-ar__tx--austerity"><a href="/web/20191012173627/https://jacobinmag.com/category/austerity">Austerity</a></li>
+                                <li class="si-ar__item si-ar__tx--books"><a href="/web/20191012173627/https://jacobinmag.com/category/books">Books</a></li>
+                                <li class="si-ar__item si-ar__tx--borders"><a href="/web/20191012173627/https://jacobinmag.com/category/borders">Borders and Immigration</a></li>
+                                <li class="si-ar__item si-ar__tx--capital"><a href="/web/20191012173627/https://jacobinmag.com/category/capital">Capital</a></li>
+                                <li class="si-ar__item si-ar__tx--cities"><a href="/web/20191012173627/https://jacobinmag.com/category/cities">Cities</a></li>
+                                <li class="si-ar__item si-ar__tx--commodification"><a href="/web/20191012173627/https://jacobinmag.com/category/commodification">Commodification</a></li>
+                                <li class="si-ar__item si-ar__tx--conjectures"><a href="/web/20191012173627/https://jacobinmag.com/category/conjectures">Conjectures</a></li>
+                                <li class="si-ar__item si-ar__tx--conservatism"><a href="/web/20191012173627/https://jacobinmag.com/category/conservatism">Conservatism</a></li>
+                                <li class="si-ar__item si-ar__tx--crisis"><a href="/web/20191012173627/https://jacobinmag.com/category/crisis">Crisis</a></li>
+                                <li class="si-ar__item si-ar__tx--culture"><a href="/web/20191012173627/https://jacobinmag.com/category/culture">Culture</a></li>
+                                <li class="si-ar__item si-ar__tx--debt"><a href="/web/20191012173627/https://jacobinmag.com/category/debt">Debt</a></li>
+                                <li class="si-ar__item si-ar__tx--development"><a href="/web/20191012173627/https://jacobinmag.com/category/development">Development</a></li>
+                                <li class="si-ar__item si-ar__tx--economic-thought"><a href="/web/20191012173627/https://jacobinmag.com/category/economic-thought">Economic Science</a></li>
+                                <li class="si-ar__item si-ar__tx--economy"><a href="/web/20191012173627/https://jacobinmag.com/category/economy">Economy</a></li>
+                                <li class="si-ar__item si-ar__tx--education"><a href="/web/20191012173627/https://jacobinmag.com/category/education">Education</a></li>
+                                <li class="si-ar__item si-ar__tx--environment"><a href="/web/20191012173627/https://jacobinmag.com/category/environment">Environment</a></li>
+                                <li class="si-ar__item si-ar__tx--feminism"><a href="/web/20191012173627/https://jacobinmag.com/category/feminism">Feminism</a></li>
+                                <li class="si-ar__item si-ar__tx--film"><a href="/web/20191012173627/https://jacobinmag.com/category/film">Film and TV</a></li>
+                                <li class="si-ar__item si-ar__tx--food"><a href="/web/20191012173627/https://jacobinmag.com/category/food">Food</a></li>
+                                <li class="si-ar__item si-ar__tx--youth-social"><a href="/web/20191012173627/https://jacobinmag.com/category/youth-social">Generational War</a></li>
+                                <li class="si-ar__item si-ar__tx--health"><a href="/web/20191012173627/https://jacobinmag.com/category/health">Health</a></li>
+                                <li class="si-ar__item si-ar__tx--history"><a href="/web/20191012173627/https://jacobinmag.com/category/history">History</a></li>
+                                <li class="si-ar__item si-ar__tx--ideas"><a href="/web/20191012173627/https://jacobinmag.com/category/ideas">Ideas</a></li>
+                                <li class="si-ar__item si-ar__tx--ideology"><a href="/web/20191012173627/https://jacobinmag.com/category/ideology">Ideology</a></li>
+                                <li class="si-ar__item si-ar__tx--inequality"><a href="/web/20191012173627/https://jacobinmag.com/category/inequality">Inequality</a></li>
+                                <li class="si-ar__item si-ar__tx--law"><a href="/web/20191012173627/https://jacobinmag.com/category/law">Law</a></li>
+                                <li class="si-ar__item si-ar__tx--lgbtq"><a href="/web/20191012173627/https://jacobinmag.com/category/lgbtq">LGBTQ</a></li>
+                                <li class="si-ar__item si-ar__tx--liberalism"><a href="/web/20191012173627/https://jacobinmag.com/category/liberalism">Liberalism</a></li>
+                                <li class="si-ar__item si-ar__tx--literature"><a href="/web/20191012173627/https://jacobinmag.com/category/literature">Literature</a></li>
+                                <li class="si-ar__item si-ar__tx--media"><a href="/web/20191012173627/https://jacobinmag.com/category/media">Media</a></li>
+                                <li class="si-ar__item si-ar__tx--music"><a href="/web/20191012173627/https://jacobinmag.com/category/music">Music</a></li>
+                                <li class="si-ar__item si-ar__tx--electoral-politics"><a href="/web/20191012173627/https://jacobinmag.com/category/electoral-politics">Electoral Politics</a></li>
+                                <li class="si-ar__item si-ar__tx--police-repression"><a href="/web/20191012173627/https://jacobinmag.com/category/police-repression">Policing and Repression</a></li>
+                                <li class="si-ar__item si-ar__tx--policy"><a href="/web/20191012173627/https://jacobinmag.com/category/policy">Policy</a></li>
+                                <li class="si-ar__item si-ar__tx--politics"><a href="/web/20191012173627/https://jacobinmag.com/category/politics">Politics</a></li>
+                                <li class="si-ar__item si-ar__tx--prisons"><a href="/web/20191012173627/https://jacobinmag.com/category/prisons">Prisons</a></li>
+                                <li class="si-ar__item si-ar__tx--race"><a href="/web/20191012173627/https://jacobinmag.com/category/race">Race</a></li>
+                                <li class="si-ar__item si-ar__tx--religion"><a href="/web/20191012173627/https://jacobinmag.com/category/religion">Religion</a></li>
+                                <li class="si-ar__item si-ar__tx--rich"><a href="/web/20191012173627/https://jacobinmag.com/category/rich">Rich People</a></li>
+                                <li class="si-ar__item si-ar__tx--science-technology"><a href="/web/20191012173627/https://jacobinmag.com/category/science-technology">Science and Technology</a></li>
+                                <li class="si-ar__item si-ar__tx--society"><a href="/web/20191012173627/https://jacobinmag.com/category/society">Society</a></li>
+                                <li class="si-ar__item si-ar__tx--sports"><a href="/web/20191012173627/https://jacobinmag.com/category/sports">Sports</a></li>
+                                <li class="si-ar__item si-ar__tx--state"><a href="/web/20191012173627/https://jacobinmag.com/category/state">State</a></li>
+                                <li class="si-ar__item si-ar__tx--strategy"><a href="/web/20191012173627/https://jacobinmag.com/category/strategy">Strategy</a></li>
+                                <li class="si-ar__item si-ar__tx--theory"><a href="/web/20191012173627/https://jacobinmag.com/category/theory">Theory</a></li>
+                                <li class="si-ar__item si-ar__tx--organized-labor"><a href="/web/20191012173627/https://jacobinmag.com/category/organized-labor">Unions</a></li>
+                                <li class="si-ar__item si-ar__tx--labor"><a href="/web/20191012173627/https://jacobinmag.com/category/labor">Wages, Productivity, and Unemployment</a></li>
+                                <li class="si-ar__item si-ar__tx--imperialism"><a href="/web/20191012173627/https://jacobinmag.com/category/imperialism">War and Imperialism</a></li>
+                                <li class="si-ar__item si-ar__tx--work"><a href="/web/20191012173627/https://jacobinmag.com/category/work">Work</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="si-ar__taxonomy">
+                        <h2 class="si-ar__subheading">Format</h2>
+                        <div class="si-ar__options">
+                            <ul class="si-ar__list">
+                                <li class="si-ar__item si-ar__tx--announcements"><a href="/web/20191012173627/https://jacobinmag.com/format/announcements">Announcements</a></li>
+                                <li class="si-ar__item si-ar__tx--dispatches"><a href="/web/20191012173627/https://jacobinmag.com/format/dispatches">Dispatches</a></li>
+                                <li class="si-ar__item si-ar__tx--interview"><a href="/web/20191012173627/https://jacobinmag.com/format/interview">Interview</a></li>
+                                <li class="si-ar__item si-ar__tx--listicle"><a href="/web/20191012173627/https://jacobinmag.com/format/listicle">Lists</a></li>
+                                <li class="si-ar__item si-ar__tx--notes"><a href="/web/20191012173627/https://jacobinmag.com/format/notes">Notes</a></li>
+                                <li class="si-ar__item si-ar__tx--obituaries"><a href="/web/20191012173627/https://jacobinmag.com/format/obituaries">Obituaries</a></li>
+                                <li class="si-ar__item si-ar__tx--profiles"><a href="/web/20191012173627/https://jacobinmag.com/format/profiles">Profiles</a></li>
+                                <li class="si-ar__item si-ar__tx--radio"><a href="/web/20191012173627/https://jacobinmag.com/format/radio">Radio</a></li>
+                                <li class="si-ar__item si-ar__tx--review"><a href="/web/20191012173627/https://jacobinmag.com/format/review">Review</a></li>
+                                <li class="si-ar__item si-ar__tx--roundtable"><a href="/web/20191012173627/https://jacobinmag.com/format/roundtable">Roundtable</a></li>
+                                <li class="si-ar__item si-ar__tx--video"><a href="/web/20191012173627/https://jacobinmag.com/format/video">Video</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="si-ar__taxonomy">
+                        <h2 class="si-ar__subheading">Locations</h2>
+                        <div class="si-ar__options">
+                            <ul class="si-ar__list">
+                                <li class="si-ar__item si-ar__tx--afghanistan"><a href="/web/20191012173627/https://jacobinmag.com/location/afghanistan">Afghanistan</a></li>
+                                <li class="si-ar__item si-ar__tx--afghanistan-mena"><a href="/web/20191012173627/https://jacobinmag.com/location/afghanistan-mena">Afghanistan</a></li>
+                                <li class="si-ar__item si-ar__tx--algeria"><a href="/web/20191012173627/https://jacobinmag.com/location/algeria">Algeria</a></li>
+                                <li class="si-ar__item si-ar__tx--angola"><a href="/web/20191012173627/https://jacobinmag.com/location/angola">Angola</a></li>
+                                <li class="si-ar__item si-ar__tx--argentina"><a href="/web/20191012173627/https://jacobinmag.com/location/argentina">Argentina</a></li>
+                                <li class="si-ar__item si-ar__tx--armenia"><a href="/web/20191012173627/https://jacobinmag.com/location/armenia">Armenia</a></li>
+                                <li class="si-ar__item si-ar__tx--australia"><a href="/web/20191012173627/https://jacobinmag.com/location/australia">Australia</a></li>
+                                <li class="si-ar__item si-ar__tx--austria"><a href="/web/20191012173627/https://jacobinmag.com/location/austria">Austria</a></li>
+                                <li class="si-ar__item si-ar__tx--azerbaijan"><a href="/web/20191012173627/https://jacobinmag.com/location/azerbaijan">Azerbaijan</a></li>
+                                <li class="si-ar__item si-ar__tx--bahrain"><a href="/web/20191012173627/https://jacobinmag.com/location/bahrain">Bahrain</a></li>
+                                <li class="si-ar__item si-ar__tx--bangladesh"><a href="/web/20191012173627/https://jacobinmag.com/location/bangladesh">Bangladesh</a></li>
+                                <li class="si-ar__item si-ar__tx--belarus"><a href="/web/20191012173627/https://jacobinmag.com/location/belarus">Belarus</a></li>
+                                <li class="si-ar__item si-ar__tx--belgium"><a href="/web/20191012173627/https://jacobinmag.com/location/belgium">Belgium</a></li>
+                                <li class="si-ar__item si-ar__tx--bolivia"><a href="/web/20191012173627/https://jacobinmag.com/location/bolivia">Bolivia</a></li>
+                                <li class="si-ar__item si-ar__tx--bosnia"><a href="/web/20191012173627/https://jacobinmag.com/location/bosnia">Bosnia</a></li>
+                                <li class="si-ar__item si-ar__tx--brazil"><a href="/web/20191012173627/https://jacobinmag.com/location/brazil">Brazil</a></li>
+                                <li class="si-ar__item si-ar__tx--bulgaria"><a href="/web/20191012173627/https://jacobinmag.com/location/bulgaria">Bulgaria</a></li>
+                                <li class="si-ar__item si-ar__tx--burkina-faso"><a href="/web/20191012173627/https://jacobinmag.com/location/burkina-faso">Burkina Faso</a></li>
+                                <li class="si-ar__item si-ar__tx--cambodia"><a href="/web/20191012173627/https://jacobinmag.com/location/cambodia">Cambodia</a></li>
+                                <li class="si-ar__item si-ar__tx--cameroon"><a href="/web/20191012173627/https://jacobinmag.com/location/cameroon">Cameroon</a></li>
+                                <li class="si-ar__item si-ar__tx--canada"><a href="/web/20191012173627/https://jacobinmag.com/location/canada">Canada</a></li>
+                                <li class="si-ar__item si-ar__tx--chile"><a href="/web/20191012173627/https://jacobinmag.com/location/chile">Chile</a></li>
+                                <li class="si-ar__item si-ar__tx--china"><a href="/web/20191012173627/https://jacobinmag.com/location/china">China</a></li>
+                                <li class="si-ar__item si-ar__tx--colombia"><a href="/web/20191012173627/https://jacobinmag.com/location/colombia">Colombia</a></li>
+                                <li class="si-ar__item si-ar__tx--congo"><a href="/web/20191012173627/https://jacobinmag.com/location/congo">Congo</a></li>
+                                <li class="si-ar__item si-ar__tx--costa-rica"><a href="/web/20191012173627/https://jacobinmag.com/location/costa-rica">Costa Rica</a></li>
+                                <li class="si-ar__item si-ar__tx--croatia"><a href="/web/20191012173627/https://jacobinmag.com/location/croatia">Croatia</a></li>
+                                <li class="si-ar__item si-ar__tx--cuba"><a href="/web/20191012173627/https://jacobinmag.com/location/cuba">Cuba</a></li>
+                                <li class="si-ar__item si-ar__tx--cyprus"><a href="/web/20191012173627/https://jacobinmag.com/location/cyprus">Cyprus</a></li>
+                                <li class="si-ar__item si-ar__tx--czech-republic"><a href="/web/20191012173627/https://jacobinmag.com/location/czech-republic">Czech Republic</a></li>
+                                <li class="si-ar__item si-ar__tx--denmark"><a href="/web/20191012173627/https://jacobinmag.com/location/denmark">Denmark</a></li>
+                                <li class="si-ar__item si-ar__tx--dominica"><a href="/web/20191012173627/https://jacobinmag.com/location/dominica">Dominica</a></li>
+                                <li class="si-ar__item si-ar__tx--dominican-republic"><a href="/web/20191012173627/https://jacobinmag.com/location/dominican-republic">Dominican Republic</a></li>
+                                <li class="si-ar__item si-ar__tx--ecuador"><a href="/web/20191012173627/https://jacobinmag.com/location/ecuador">Ecuador</a></li>
+                                <li class="si-ar__item si-ar__tx--egypt"><a href="/web/20191012173627/https://jacobinmag.com/location/egypt">Egypt</a></li>
+                                <li class="si-ar__item si-ar__tx--el-salvador"><a href="/web/20191012173627/https://jacobinmag.com/location/el-salvador">El Salvador</a></li>
+                                <li class="si-ar__item si-ar__tx--eritrea"><a href="/web/20191012173627/https://jacobinmag.com/location/eritrea">Eritrea</a></li>
+                                <li class="si-ar__item si-ar__tx--ethiopia"><a href="/web/20191012173627/https://jacobinmag.com/location/ethiopia">Ethiopia</a></li>
+                                <li class="si-ar__item si-ar__tx--finland"><a href="/web/20191012173627/https://jacobinmag.com/location/finland">Finland</a></li>
+                                <li class="si-ar__item si-ar__tx--france"><a href="/web/20191012173627/https://jacobinmag.com/location/france">France</a></li>
+                                <li class="si-ar__item si-ar__tx--georgia"><a href="/web/20191012173627/https://jacobinmag.com/location/georgia">Georgia</a></li>
+                                <li class="si-ar__item si-ar__tx--germany"><a href="/web/20191012173627/https://jacobinmag.com/location/germany">Germany</a></li>
+                                <li class="si-ar__item si-ar__tx--ghana"><a href="/web/20191012173627/https://jacobinmag.com/location/ghana">Ghana</a></li>
+                                <li class="si-ar__item si-ar__tx--greece"><a href="/web/20191012173627/https://jacobinmag.com/location/greece">Greece</a></li>
+                                <li class="si-ar__item si-ar__tx--guatemala"><a href="/web/20191012173627/https://jacobinmag.com/location/guatemala">Guatemala</a></li>
+                                <li class="si-ar__item si-ar__tx--guina"><a href="/web/20191012173627/https://jacobinmag.com/location/guina">Guina</a></li>
+                                <li class="si-ar__item si-ar__tx--haiti"><a href="/web/20191012173627/https://jacobinmag.com/location/haiti">Haiti</a></li>
+                                <li class="si-ar__item si-ar__tx--honduras"><a href="/web/20191012173627/https://jacobinmag.com/location/honduras">Honduras</a></li>
+                                <li class="si-ar__item si-ar__tx--hong-kong"><a href="/web/20191012173627/https://jacobinmag.com/location/hong-kong">Hong Kong</a></li>
+                                <li class="si-ar__item si-ar__tx--hungary"><a href="/web/20191012173627/https://jacobinmag.com/location/hungary">Hungary</a></li>
+                                <li class="si-ar__item si-ar__tx--iceland"><a href="/web/20191012173627/https://jacobinmag.com/location/iceland">Iceland</a></li>
+                                <li class="si-ar__item si-ar__tx--india"><a href="/web/20191012173627/https://jacobinmag.com/location/india">India</a></li>
+                                <li class="si-ar__item si-ar__tx--indonesia"><a href="/web/20191012173627/https://jacobinmag.com/location/indonesia">Indonesia</a></li>
+                                <li class="si-ar__item si-ar__tx--iran"><a href="/web/20191012173627/https://jacobinmag.com/location/iran">Iran</a></li>
+                                <li class="si-ar__item si-ar__tx--iraq"><a href="/web/20191012173627/https://jacobinmag.com/location/iraq">Iraq</a></li>
+                                <li class="si-ar__item si-ar__tx--ireland"><a href="/web/20191012173627/https://jacobinmag.com/location/ireland">Ireland</a></li>
+                                <li class="si-ar__item si-ar__tx--israel-palestine"><a href="/web/20191012173627/https://jacobinmag.com/location/israel-palestine">Israel / Palestine</a></li>
+                                <li class="si-ar__item si-ar__tx--italy"><a href="/web/20191012173627/https://jacobinmag.com/location/italy">Italy</a></li>
+                                <li class="si-ar__item si-ar__tx--jamaica"><a href="/web/20191012173627/https://jacobinmag.com/location/jamaica">Jamaica</a></li>
+                                <li class="si-ar__item si-ar__tx--japan"><a href="/web/20191012173627/https://jacobinmag.com/location/japan">Japan</a></li>
+                                <li class="si-ar__item si-ar__tx--jordan"><a href="/web/20191012173627/https://jacobinmag.com/location/jordan">Jordan</a></li>
+                                <li class="si-ar__item si-ar__tx--kenya"><a href="/web/20191012173627/https://jacobinmag.com/location/kenya">Kenya</a></li>
+                                <li class="si-ar__item si-ar__tx--kurdistan"><a href="/web/20191012173627/https://jacobinmag.com/location/kurdistan">Kurdistan</a></li>
+                                <li class="si-ar__item si-ar__tx--laos"><a href="/web/20191012173627/https://jacobinmag.com/location/laos">Laos</a></li>
+                                <li class="si-ar__item si-ar__tx--lebanon"><a href="/web/20191012173627/https://jacobinmag.com/location/lebanon">Lebanon</a></li>
+                                <li class="si-ar__item si-ar__tx--libya"><a href="/web/20191012173627/https://jacobinmag.com/location/libya">Libya</a></li>
+                                <li class="si-ar__item si-ar__tx--luxembourg"><a href="/web/20191012173627/https://jacobinmag.com/location/luxembourg">Luxembourg</a></li>
+                                <li class="si-ar__item si-ar__tx--macedonia"><a href="/web/20191012173627/https://jacobinmag.com/location/macedonia">Macedonia</a></li>
+                                <li class="si-ar__item si-ar__tx--malaysia"><a href="/web/20191012173627/https://jacobinmag.com/location/malaysia">Malaysia</a></li>
+                                <li class="si-ar__item si-ar__tx--malta"><a href="/web/20191012173627/https://jacobinmag.com/location/malta">Malta</a></li>
+                                <li class="si-ar__item si-ar__tx--mexico"><a href="/web/20191012173627/https://jacobinmag.com/location/mexico">Mexico</a></li>
+                                <li class="si-ar__item si-ar__tx--moldova"><a href="/web/20191012173627/https://jacobinmag.com/location/moldova">Moldova</a></li>
+                                <li class="si-ar__item si-ar__tx--mongolia"><a href="/web/20191012173627/https://jacobinmag.com/location/mongolia">Mongolia</a></li>
+                                <li class="si-ar__item si-ar__tx--morocco"><a href="/web/20191012173627/https://jacobinmag.com/location/morocco">Morocco</a></li>
+                                <li class="si-ar__item si-ar__tx--mozambique"><a href="/web/20191012173627/https://jacobinmag.com/location/mozambique">Mozambique</a></li>
+                                <li class="si-ar__item si-ar__tx--myanmar-burma"><a href="/web/20191012173627/https://jacobinmag.com/location/myanmar-burma">Myanmar / Burma</a></li>
+                                <li class="si-ar__item si-ar__tx--nepal"><a href="/web/20191012173627/https://jacobinmag.com/location/nepal">Nepal</a></li>
+                                <li class="si-ar__item si-ar__tx--netherlands"><a href="/web/20191012173627/https://jacobinmag.com/location/netherlands">Netherlands</a></li>
+                                <li class="si-ar__item si-ar__tx--new-zealand"><a href="/web/20191012173627/https://jacobinmag.com/location/new-zealand">New Zealand</a></li>
+                                <li class="si-ar__item si-ar__tx--nicaragua"><a href="/web/20191012173627/https://jacobinmag.com/location/nicaragua">Nicaragua</a></li>
+                                <li class="si-ar__item si-ar__tx--nigeria"><a href="/web/20191012173627/https://jacobinmag.com/location/nigeria">Nigeria</a></li>
+                                <li class="si-ar__item si-ar__tx--north-korea"><a href="/web/20191012173627/https://jacobinmag.com/location/north-korea">North Korea</a></li>
+                                <li class="si-ar__item si-ar__tx--norway"><a href="/web/20191012173627/https://jacobinmag.com/location/norway">Norway</a></li>
+                                <li class="si-ar__item si-ar__tx--pakistan"><a href="/web/20191012173627/https://jacobinmag.com/location/pakistan">Pakistan</a></li>
+                                <li class="si-ar__item si-ar__tx--panama"><a href="/web/20191012173627/https://jacobinmag.com/location/panama">Panama</a></li>
+                                <li class="si-ar__item si-ar__tx--peru"><a href="/web/20191012173627/https://jacobinmag.com/location/peru">Peru</a></li>
+                                <li class="si-ar__item si-ar__tx--philippines"><a href="/web/20191012173627/https://jacobinmag.com/location/philippines">Philippines</a></li>
+                                <li class="si-ar__item si-ar__tx--poland"><a href="/web/20191012173627/https://jacobinmag.com/location/poland">Poland</a></li>
+                                <li class="si-ar__item si-ar__tx--portugal"><a href="/web/20191012173627/https://jacobinmag.com/location/portugal">Portugal</a></li>
+                                <li class="si-ar__item si-ar__tx--puerto-rico"><a href="/web/20191012173627/https://jacobinmag.com/location/puerto-rico">Puerto Rico</a></li>
+                                <li class="si-ar__item si-ar__tx--qatar"><a href="/web/20191012173627/https://jacobinmag.com/location/qatar">Qatar</a></li>
+                                <li class="si-ar__item si-ar__tx--romania"><a href="/web/20191012173627/https://jacobinmag.com/location/romania">Romania</a></li>
+                                <li class="si-ar__item si-ar__tx--russia"><a href="/web/20191012173627/https://jacobinmag.com/location/russia">Russia</a></li>
+                                <li class="si-ar__item si-ar__tx--rwanda"><a href="/web/20191012173627/https://jacobinmag.com/location/rwanda">Rwanda</a></li>
+                                <li class="si-ar__item si-ar__tx--saudi-arabia"><a href="/web/20191012173627/https://jacobinmag.com/location/saudi-arabia">Saudi Arabia</a></li>
+                                <li class="si-ar__item si-ar__tx--scotland"><a href="/web/20191012173627/https://jacobinmag.com/location/scotland">Scotland</a></li>
+                                <li class="si-ar__item si-ar__tx--serbia"><a href="/web/20191012173627/https://jacobinmag.com/location/serbia">Serbia</a></li>
+                                <li class="si-ar__item si-ar__tx--sierra-leone"><a href="/web/20191012173627/https://jacobinmag.com/location/sierra-leone">Sierra Leone</a></li>
+                                <li class="si-ar__item si-ar__tx--singapore"><a href="/web/20191012173627/https://jacobinmag.com/location/singapore">Singapore</a></li>
+                                <li class="si-ar__item si-ar__tx--slovakia"><a href="/web/20191012173627/https://jacobinmag.com/location/slovakia">Slovakia</a></li>
+                                <li class="si-ar__item si-ar__tx--slovenia"><a href="/web/20191012173627/https://jacobinmag.com/location/slovenia">Slovenia</a></li>
+                                <li class="si-ar__item si-ar__tx--south-africa"><a href="/web/20191012173627/https://jacobinmag.com/location/south-africa">South Africa</a></li>
+                                <li class="si-ar__item si-ar__tx--south-korea"><a href="/web/20191012173627/https://jacobinmag.com/location/south-korea">South Korea</a></li>
+                                <li class="si-ar__item si-ar__tx--south-sudan"><a href="/web/20191012173627/https://jacobinmag.com/location/south-sudan">South Sudan</a></li>
+                                <li class="si-ar__item si-ar__tx--spain"><a href="/web/20191012173627/https://jacobinmag.com/location/spain">Spain</a></li>
+                                <li class="si-ar__item si-ar__tx--sri-lanka"><a href="/web/20191012173627/https://jacobinmag.com/location/sri-lanka">Sri Lanka</a></li>
+                                <li class="si-ar__item si-ar__tx--north-sudan"><a href="/web/20191012173627/https://jacobinmag.com/location/north-sudan">Sudan</a></li>
+                                <li class="si-ar__item si-ar__tx--sweden"><a href="/web/20191012173627/https://jacobinmag.com/location/sweden">Sweden</a></li>
+                                <li class="si-ar__item si-ar__tx--switzerland"><a href="/web/20191012173627/https://jacobinmag.com/location/switzerland">Switzerland</a></li>
+                                <li class="si-ar__item si-ar__tx--syria"><a href="/web/20191012173627/https://jacobinmag.com/location/syria">Syria</a></li>
+                                <li class="si-ar__item si-ar__tx--taiwan"><a href="/web/20191012173627/https://jacobinmag.com/location/taiwan">Taiwan</a></li>
+                                <li class="si-ar__item si-ar__tx--tanzania"><a href="/web/20191012173627/https://jacobinmag.com/location/tanzania">Tanzania</a></li>
+                                <li class="si-ar__item si-ar__tx--thailand"><a href="/web/20191012173627/https://jacobinmag.com/location/thailand">Thailand</a></li>
+                                <li class="si-ar__item si-ar__tx--tibet"><a href="/web/20191012173627/https://jacobinmag.com/location/tibet">Tibet</a></li>
+                                <li class="si-ar__item si-ar__tx--tunisia"><a href="/web/20191012173627/https://jacobinmag.com/location/tunisia">Tunisia</a></li>
+                                <li class="si-ar__item si-ar__tx--turkey"><a href="/web/20191012173627/https://jacobinmag.com/location/turkey">Turkey</a></li>
+                                <li class="si-ar__item si-ar__tx--uk"><a href="/web/20191012173627/https://jacobinmag.com/location/uk">UK</a></li>
+                                <li class="si-ar__item si-ar__tx--ukraine"><a href="/web/20191012173627/https://jacobinmag.com/location/ukraine">Ukraine</a></li>
+                                <li class="si-ar__item si-ar__tx--united-arab-emirates"><a href="/web/20191012173627/https://jacobinmag.com/location/united-arab-emirates">United Arab Emirates</a></li>
+                                <li class="si-ar__item si-ar__tx--united-kingdom"><a href="/web/20191012173627/https://jacobinmag.com/location/united-kingdom">United Kingdom</a></li>
+                                <li class="si-ar__item si-ar__tx--united-states"><a href="/web/20191012173627/https://jacobinmag.com/location/united-states">United States</a></li>
+                                <li class="si-ar__item si-ar__tx--venezuela"><a href="/web/20191012173627/https://jacobinmag.com/location/venezuela">Venezuela</a></li>
+                                <li class="si-ar__item si-ar__tx--vietnam"><a href="/web/20191012173627/https://jacobinmag.com/location/vietnam">Vietnam</a></li>
+                                <li class="si-ar__item si-ar__tx--west-papua"><a href="/web/20191012173627/https://jacobinmag.com/location/west-papua">West Papua</a></li>
+                                <li class="si-ar__item si-ar__tx--yemen"><a href="/web/20191012173627/https://jacobinmag.com/location/yemen">Yemen</a></li>
+                                <li class="si-ar__item si-ar__tx--zimbabwe"><a href="/web/20191012173627/https://jacobinmag.com/location/zimbabwe">Zimbabwe</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="si-ar__taxonomy">
+                        <h2 class="si-ar__subheading">Series</h2>
+                        <div class="si-ar__options">
+                            <ul class="si-ar__list">
+                                <li class="si-ar__item si-ar__tx--italian-elections-2018"><a href="/web/20191012173627/https://jacobinmag.com/series/italian-elections-2018">2018 Italian Elections</a></li>
+                                <li class="si-ar__item si-ar__tx--against-thrift"><a href="/web/20191012173627/https://jacobinmag.com/series/against-thrift">Against Thrift</a></li>
+                                <li class="si-ar__item si-ar__tx--anti-work"><a href="/web/20191012173627/https://jacobinmag.com/series/anti-work">Anti-Work</a></li>
+                                <li class="si-ar__item si-ar__tx--art-and-class"><a href="/web/20191012173627/https://jacobinmag.com/series/art-and-class">Art and Class</a></li>
+                                <li class="si-ar__item si-ar__tx--assessing-obama"><a href="/web/20191012173627/https://jacobinmag.com/series/assessing-obama">Assessing Obama</a></li>
+                                <li class="si-ar__item si-ar__tx--c-wright-mills"><a href="/web/20191012173627/https://jacobinmag.com/series/c-wright-mills">C. Wright Mills</a></li>
+                                <li class="si-ar__item si-ar__tx--charter-schools-in-new-orleans"><a href="/web/20191012173627/https://jacobinmag.com/series/charter-schools-in-new-orleans">Charter Schools</a></li>
+                                <li class="si-ar__item si-ar__tx--chattanooga"><a href="/web/20191012173627/https://jacobinmag.com/series/chattanooga">Chattanooga</a></li>
+                                <li class="si-ar__item si-ar__tx--class-and-identity"><a href="/web/20191012173627/https://jacobinmag.com/series/class-and-identity">Class and Identity</a></li>
+                                <li class="si-ar__item si-ar__tx--climate-change-and-apocalypse"><a href="/web/20191012173627/https://jacobinmag.com/series/climate-change-and-apocalypse">Climate Change and Apocalypse</a></li>
+                                <li class="si-ar__item si-ar__tx--density"><a href="/web/20191012173627/https://jacobinmag.com/series/density">Density</a></li>
+                                <li class="si-ar__item si-ar__tx--foucault"><a href="/web/20191012173627/https://jacobinmag.com/series/foucault">Foucault</a></li>
+                                <li class="si-ar__item si-ar__tx--frick-collection"><a href="/web/20191012173627/https://jacobinmag.com/series/frick-collection">Frick Collection</a></li>
+                                <li class="si-ar__item si-ar__tx--gamer-culture"><a href="/web/20191012173627/https://jacobinmag.com/series/gamer-culture">Gamer Culture</a></li>
+                                <li class="si-ar__item si-ar__tx--geek-culture"><a href="/web/20191012173627/https://jacobinmag.com/series/geek-culture">Geek Culture</a></li>
+                                <li class="si-ar__item si-ar__tx--graebers-debt"><a href="/web/20191012173627/https://jacobinmag.com/series/graebers-debt">Graeber's Debt</a></li>
+                                <li class="si-ar__item si-ar__tx--hostess-bankruptcy"><a href="/web/20191012173627/https://jacobinmag.com/series/hostess-bankruptcy">Hostess Bankruptcy</a></li>
+                                <li class="si-ar__item si-ar__tx--irish-marriage-equality"><a href="/web/20191012173627/https://jacobinmag.com/series/irish-marriage-equality">Irish Marriage Equality</a></li>
+                                <li class="si-ar__item si-ar__tx--left-and-state"><a href="/web/20191012173627/https://jacobinmag.com/series/left-and-state">Left and State</a></li>
+                                <li class="si-ar__item si-ar__tx--lincoln"><a href="/web/20191012173627/https://jacobinmag.com/series/lincoln">Lincoln</a></li>
+                                <li class="si-ar__item si-ar__tx--lincoln-and-emancipation"><a href="/web/20191012173627/https://jacobinmag.com/series/lincoln-and-emancipation">Lincoln and Emancipation</a></li>
+                                <li class="si-ar__item si-ar__tx--market-socialism"><a href="/web/20191012173627/https://jacobinmag.com/series/market-socialism">Market Socialism</a></li>
+                                <li class="si-ar__item si-ar__tx--marxs-inferno"><a href="/web/20191012173627/https://jacobinmag.com/series/marxs-inferno">Marx's Inferno</a></li>
+                                <li class="si-ar__item si-ar__tx--morality-and-the-left"><a href="/web/20191012173627/https://jacobinmag.com/series/morality-and-the-left">Morality and the Left</a></li>
+                                <li class="si-ar__item si-ar__tx--piketty"><a href="/web/20191012173627/https://jacobinmag.com/series/piketty">Piketty</a></li>
+                                <li class="si-ar__item si-ar__tx--police-and-occupy"><a href="/web/20191012173627/https://jacobinmag.com/series/police-and-occupy">Police and Occupy</a></li>
+                                <li class="si-ar__item si-ar__tx--popular-power"><a href="/web/20191012173627/https://jacobinmag.com/series/popular-power">Popular Power</a></li>
+                                <li class="si-ar__item si-ar__tx--prison-abolition"><a href="/web/20191012173627/https://jacobinmag.com/series/prison-abolition">Prison Abolition and Prison Reform</a></li>
+                                <li class="si-ar__item si-ar__tx--projects"><a href="/web/20191012173627/https://jacobinmag.com/series/projects">Projects</a></li>
+                                <li class="si-ar__item si-ar__tx--real-utopias"><a href="/web/20191012173627/https://jacobinmag.com/series/real-utopias">Real Utopias</a></li>
+                                <li class="si-ar__item si-ar__tx--reparations"><a href="/web/20191012173627/https://jacobinmag.com/series/reparations">Reparations</a></li>
+                                <li class="si-ar__item si-ar__tx--strike-for-america"><a href="/web/20191012173627/https://jacobinmag.com/series/strike-for-america">Strike for America: Chicago Teachers Against Austerity</a></li>
+                                <li class="si-ar__item si-ar__tx--superpredator"><a href="/web/20191012173627/https://jacobinmag.com/series/superpredator">Superpredator</a></li>
+                                <li class="si-ar__item si-ar__tx--abcs-socialism"><a href="/web/20191012173627/https://jacobinmag.com/series/abcs-socialism">The ABCs of Socialism</a></li>
+                                <li class="si-ar__item si-ar__tx--the-chinese-working-class"><a href="/web/20191012173627/https://jacobinmag.com/series/the-chinese-working-class">The Chinese Working Class</a></li>
+                                <li class="si-ar__item si-ar__tx--the-demise-of-unions"><a href="/web/20191012173627/https://jacobinmag.com/series/the-demise-of-unions">The Demise of Unions</a></li>
+                                <li class="si-ar__item si-ar__tx--the-jacobin-spirit"><a href="/web/20191012173627/https://jacobinmag.com/series/the-jacobin-spirit">The Jacobin Spirit</a></li>
+                                <li class="si-ar__item si-ar__tx--the-lula-conviction"><a href="/web/20191012173627/https://jacobinmag.com/series/the-lula-conviction">The Lula Conviction</a></li>
+                                <li class="si-ar__item si-ar__tx--the-making-of-global-capitalism"><a href="/web/20191012173627/https://jacobinmag.com/series/the-making-of-global-capitalism">The Making of Global Capitalism</a></li>
+                                <li class="si-ar__item si-ar__tx--the-politics-of-climate-change"><a href="/web/20191012173627/https://jacobinmag.com/series/the-politics-of-climate-change">The Politics of Climate Change</a></li>
+                                <li class="si-ar__item si-ar__tx--the-precariat"><a href="/web/20191012173627/https://jacobinmag.com/series/the-precariat">The Precariat</a></li>
+                                <li class="si-ar__item si-ar__tx--russian-revolution"><a href="/web/20191012173627/https://jacobinmag.com/series/russian-revolution">The Russian Revolution at 100</a></li>
+                                <li class="si-ar__item si-ar__tx--west-virginia-strike-2018"><a href="/web/20191012173627/https://jacobinmag.com/series/west-virginia-strike-2018">The West Virginia Strike</a></li>
+                                <li class="si-ar__item si-ar__tx--this-changes-everything"><a href="/web/20191012173627/https://jacobinmag.com/series/this-changes-everything">This Changes Everything</a></li>
+                                <li class="si-ar__item si-ar__tx--trans-pacific-partnership"><a href="/web/20191012173627/https://jacobinmag.com/series/trans-pacific-partnership">Trans-Pacific Partnership</a></li>
+                                <li class="si-ar__item si-ar__tx--v-e-day"><a href="/web/20191012173627/https://jacobinmag.com/series/v-e-day">Victory in Europe</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="si-ar__taxonomy">
+                        <h2 class="si-ar__subheading">Issues</h2>
+                        <div class="si-ar__options">
+                            <ul class="si-ar__list">
+                                <li class="si-ar__item si-ar__tx--home-improvement"><a href="/web/20191012173627/https://jacobinmag.com/issue/war-is-a-racket">Issue 34: War Is a Racket</a></li>
+                                <li class="si-ar__item si-ar__tx--home-improvement"><a href="/web/20191012173627/https://jacobinmag.com/issue/home-improvement">Issue 33: Home Improvement</a></li>
+                                <li class="si-ar__item si-ar__tx--a-true-story-of-the-future"><a href="/web/20191012173627/https://jacobinmag.com/issue/a-true-story-of-the-future">Issue 32: A True Story of the Future</a></li>
+                                <li class="si-ar__item si-ar__tx--breaking-bank"><a href="/web/20191012173627/https://jacobinmag.com/issue/breaking-bank">Issue 31: Breaking Bank</a></li>
+                                <li class="si-ar__item si-ar__tx--childhood"><a href="/web/20191012173627/https://jacobinmag.com/issue/childhood">Issue 30: Childhood</a></li>
+                                <li class="si-ar__item si-ar__tx--nineteen-sixty-eight"><a href="/web/20191012173627/https://jacobinmag.com/issue/nineteen-sixty-eight">Issue 29: 1968</a></li>
+                                <li class="si-ar__item si-ar__tx--the-health-of-nations"><a href="/web/20191012173627/https://jacobinmag.com/issue/the-health-of-nations">Issue 28: The Health of Nations</a></li>
+                                <li class="si-ar__item si-ar__tx--the-first-red-century"><a href="/web/20191012173627/https://jacobinmag.com/issue/the-first-red-century">Issue 27: The First Red Century</a></li>
+                                <li class="si-ar__item si-ar__tx--earth-wind-and-fire"><a href="/web/20191012173627/https://jacobinmag.com/issue/earth-wind-and-fire">Issue 26: Earth, Wind, &amp; Fire</a></li>
+                                <li class="si-ar__item si-ar__tx--by-taking-power"><a href="/web/20191012173627/https://jacobinmag.com/issue/by-taking-power">Issue 25: By Taking Power</a></li>
+                                <li class="si-ar__item si-ar__tx--journey-to-the-dark-side"><a href="/web/20191012173627/https://jacobinmag.com/issue/journey-to-the-dark-side">Issue 24: Journey to the Dark Side</a></li>
+                                <li class="si-ar__item si-ar__tx--the-party-we-need"><a href="/web/20191012173627/https://jacobinmag.com/issue/the-party-we-need">Issue 23: The Party We Need</a></li>
+                                <li class="si-ar__item si-ar__tx--rank-and-file"><a href="/web/20191012173627/https://jacobinmag.com/issue/rank-and-file">Issue 22: Rank and File</a></li>
+                                <li class="si-ar__item si-ar__tx--between-the-risings"><a href="/web/20191012173627/https://jacobinmag.com/issue/between-the-risings">Issue 21: Between the Risings</a></li>
+                                <li class="si-ar__item si-ar__tx--up-from-liberalism"><a href="/web/20191012173627/https://jacobinmag.com/issue/up-from-liberalism">Issue 20: Up From Liberalism</a></li>
+                                <li class="si-ar__item si-ar__tx--uneven-and-combined"><a href="/web/20191012173627/https://jacobinmag.com/issue/uneven-and-combined">Issue 19: Uneven and Combined</a></li>
+                                <li class="si-ar__item si-ar__tx--struggle-and-progress"><a href="/web/20191012173627/https://jacobinmag.com/issue/struggle-and-progress">Issue 18: Struggle and Progress</a></li>
+                                <li class="si-ar__item si-ar__tx--ours-to-master"><a href="/web/20191012173627/https://jacobinmag.com/issue/ours-to-master">Issue 17: Ours to Master</a></li>
+                                <li class="si-ar__item si-ar__tx--paint-the-town-red"><a href="/web/20191012173627/https://jacobinmag.com/issue/paint-the-town-red">Issue 15-16: Paint the Town Red</a></li>
+                                <li class="si-ar__item si-ar__tx--a-world-to-win"><a href="/web/20191012173627/https://jacobinmag.com/issue/a-world-to-win">Issue 14: A World to Win</a></li>
+                                <li class="si-ar__item si-ar__tx--alive-in-the-sunshine"><a href="/web/20191012173627/https://jacobinmag.com/issue/alive-in-the-sunshine">Issue 13: Alive in the Sunshine</a></li>
+                                <li class="si-ar__item si-ar__tx--misery-index"><a href="/web/20191012173627/https://jacobinmag.com/issue/misery-index">Issue 11-12: Misery Index</a></li>
+                                <li class="si-ar__item si-ar__tx--assembly-required-2"><a href="/web/20191012173627/https://jacobinmag.com/issue/assembly-required-2">Issue 10: Assembly Required</a></li>
+                                <li class="si-ar__item si-ar__tx--modify-your-dissent"><a href="/web/20191012173627/https://jacobinmag.com/issue/modify-your-dissent">Issue 9: Modify Your Dissent</a></li>
+                                <li class="si-ar__item si-ar__tx--emancipation"><a href="/web/20191012173627/https://jacobinmag.com/issue/emancipation">Issue 7-8: Emancipation</a></li>
+                                <li class="si-ar__item si-ar__tx--praxis"><a href="/web/20191012173627/https://jacobinmag.com/issue/praxis">Issue 6: Praxis</a></li>
+                                <li class="si-ar__item si-ar__tx--phase-two"><a href="/web/20191012173627/https://jacobinmag.com/issue/phase-two">Issue 5: Phase Two</a></li>
+                                <li class="si-ar__item si-ar__tx--liberalism-is-dead"><a href="/web/20191012173627/https://jacobinmag.com/issue/liberalism-is-dead">Issue 3-4: Liberalism is Dead</a></li>
+                                <li class="si-ar__item si-ar__tx--and-yet-it-moves"><a href="/web/20191012173627/https://jacobinmag.com/issue/and-yet-it-moves">Issue 2: And Yet It Moves</a></li>
+                                <li class="si-ar__item si-ar__tx--introducing"><a href="/web/20191012173627/https://jacobinmag.com/issue/introducing">Issue 1: Introducing…</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="si-ar__taxonomy">
+                        <h2 class="si-ar__subheading">Departments</h2>
+                        <div class="si-ar__options">
+                            <ul class="si-ar__list">
+                                <li class="si-ar__item si-ar__tx--bass-and-superstructure"><a href="/web/20191012173627/https://jacobinmag.com/department/bass-and-superstructure">Bass and Superstructure</a></li>
+                                <li class="si-ar__item si-ar__tx--beyond-a-boundary"><a href="/web/20191012173627/https://jacobinmag.com/department/beyond-a-boundary">Beyond a Boundary</a></li>
+                                <li class="si-ar__item si-ar__tx--canon-fodder"><a href="/web/20191012173627/https://jacobinmag.com/department/canon-fodder">Canon Fodder</a></li>
+                                <li class="si-ar__item si-ar__tx--cultural-capital"><a href="/web/20191012173627/https://jacobinmag.com/department/cultural-capital">Cultural Capital</a></li>
+                                <li class="si-ar__item si-ar__tx--dossier"><a href="/web/20191012173627/https://jacobinmag.com/department/dossier">Dossier</a></li>
+                                <li class="si-ar__item si-ar__tx--feature"><a href="/web/20191012173627/https://jacobinmag.com/department/feature">Feature</a></li>
+                                <li class="si-ar__item si-ar__tx--friends-and-foes"><a href="/web/20191012173627/https://jacobinmag.com/department/friends-and-foes">Friends and Foes</a></li>
+                                <li class="si-ar__item si-ar__tx--front-matters"><a href="/web/20191012173627/https://jacobinmag.com/department/front-matters">Front Matters</a></li>
+                                <li class="si-ar__item si-ar__tx--girondins"><a href="/web/20191012173627/https://jacobinmag.com/department/girondins">Girondins</a></li>
+                                <li class="si-ar__item si-ar__tx--leftovers"><a href="/web/20191012173627/https://jacobinmag.com/department/leftovers">Leftovers</a></li>
+                                <li class="si-ar__item si-ar__tx--means-and-ends"><a href="/web/20191012173627/https://jacobinmag.com/department/means-and-ends">Means and Ends</a></li>
+                                <li class="si-ar__item si-ar__tx--means-of-deduction"><a href="/web/20191012173627/https://jacobinmag.com/department/means-of-deduction">Means of Deduction</a></li>
+                                <li class="si-ar__item si-ar__tx--party-lines"><a href="/web/20191012173627/https://jacobinmag.com/department/party-lines">Party Lines</a></li>
+                                <li class="si-ar__item si-ar__tx--popular-front"><a href="/web/20191012173627/https://jacobinmag.com/department/popular-front">Popular Front</a></li>
+                                <li class="si-ar__item si-ar__tx--reading-materiel"><a href="/web/20191012173627/https://jacobinmag.com/department/reading-materiel">Reading Materiel</a></li>
+                                <li class="si-ar__item si-ar__tx--red-channels"><a href="/web/20191012173627/https://jacobinmag.com/department/red-channels">Red Channels</a></li>
+                                <li class="si-ar__item si-ar__tx--struggle-session"><a href="/web/20191012173627/https://jacobinmag.com/department/struggle-session">Struggle Session</a></li>
+                                <li class="si-ar__item si-ar__tx--the-cookshop"><a href="/web/20191012173627/https://jacobinmag.com/department/the-cookshop">The Cookshop</a></li>
+                                <li class="si-ar__item si-ar__tx--the-dustbin"><a href="/web/20191012173627/https://jacobinmag.com/department/the-dustbin">The Dustbin</a></li>
+                                <li class="si-ar__item si-ar__tx--the-tumbrel"><a href="/web/20191012173627/https://jacobinmag.com/department/the-tumbrel">The Tumbrel</a></li>
+                                <li class="si-ar__item si-ar__tx--the-vulgar-empiricist"><a href="/web/20191012173627/https://jacobinmag.com/department/the-vulgar-empiricist">The Vulgar Empiricist</a></li>
+                                <li class="si-ar__item si-ar__tx--thermidor"><a href="/web/20191012173627/https://jacobinmag.com/department/thermidor">Thermidor</a></li>
+                                <li class="si-ar__item si-ar__tx--uneven-and-combined"><a href="/web/20191012173627/https://jacobinmag.com/department/uneven-and-combined">Uneven and Combined</a></li>
+                                <li class="si-ar__item si-ar__tx--versailles"><a href="/web/20191012173627/https://jacobinmag.com/department/versailles">Versailles</a></li>
+                                <li class="si-ar__item si-ar__tx--ways-of-seeing"><a href="/web/20191012173627/https://jacobinmag.com/department/ways-of-seeing">Ways of Seeing</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </nav>
+    </transition>
+</div>
+
+
+
+
+<script src="/web/20191012173627js_/https://jacobinmag.com/static/1569970862/js/jacobin.js" type="text/javascript"></script>
+
+
+</body>
+
+</html>
+
