@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+
+<head>
+<link rel="stylesheet" type="text/css" href="../main.css" />
+<link rel="stylesheet" type="text/css" href="../overrides.css" />
+<meta charset="UTF-8"/>
+<title>Jacobin</title>
+</head>
+
+
+<body>
+
+
+<div id="page-helper">
+    <!-- this is here for Vue to bind to! Don't remove! -->
+</div>
+
+<header class="si-hr prt-x" id="site-header">
+    <div class="si-hr__container">
+
+        <!-- Logo -->
+
+        <div class="si-hr-lo">
+            <a class="si-hr-lo__container" href="https://paradoink.github.io/index.html" tabindex="1">
+
+
+                <h1 style="margin-left: 50px;">Bolshevik</h1>
+            </a>
+        </div>
+
+        <!-- Links -->
+
+
+
+        <ul class="si-hr-lk si-hr-lk--po">
+
+        <li class="si-hr-lk__item si-hr-lk__item--1">
+            <a class="si-hr-lk__link" href="https://discord.gg/5SVkfxk">Subscribe</a>
+        </li>
+
+
+        <li class="si-hr-lk__item si-hr-lk__item--2">
+            <a class="si-hr-lk__link" href="https://paradoink.github.io/Magazines/Eco.pdf">Magazine</a>
+        </li>
+        <li class="si-hr-lk__item si-hr-lk__item--3">
+            <a class="si-hr-lk__link" href="/donate">Donate</a>
+        </li>
+        <li class="si-hr-lk__item si-hr-lk__item--4">
+            <a class="si-hr-lk__link" href="http://catalyst-journal.com/">Catalyst</a>
+        </li>
+    </ul>
+
+
+
+    </div>
+
+    <div id="site-menu">
+        <transition name="fadein">
+            <div class="si-hr-mu" v-cloak v-if="menuActive">
+                <div class="si-hr-mu__container">
+                    <ul class="si-hr-mu__list">
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/subscribe" tabindex="1">Subscribe</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/storeissues" tabindex="1">Back Issues</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/donate" tabindex="1">Donate</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/store" tabindex="1">Store</a>
+                        </li>
+                    </ul>
+
+                    <ul class="si-hr-mu__list">
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/issue/war-is-a-racket" id="magazine-link" tabindex="1">Magazine</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/blog" tabindex="1">Blog</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="http://catalyst-journal.com/" tabindex="1">Catalyst</a>
+                        </li>
+                    </ul>
+
+                    <ul class="si-hr-mu__list">
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/about" tabindex="1">About</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/contact" tabindex="1">Contact Us</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/reading-groups" tabindex="1">Reading Groups</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/advertise" tabindex="1">Advertise</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </transition>
+    </div>
+
+
+    <div id="site-login">
+        <transition name="fadein">
+            <div class="si-hr-ln" v-cloak v-if="loginActive || forgotActive">
+
+                <form class="si-hr-ln__form" v-if="loginActive" v-on:submit.prevent="submitLogin">
+                    <div class="si-hr-ln__error" v-if="errors">
+                        {{ errors }}
+                    </div>
+                    <label class="si-hr-ln__label">
+                        Email
+                        <input class="si-hr-ln__field si-hr-ln__field--email" id="login.email" name="email" placeholder tabindex="1" v-model="email"/>
+                    </label>
+                    <label class="si-hr-ln__label">
+                        Password
+                        <input class="si-hr-ln__field si-hr-ln__field--password" id="login.password" name="password" placeholder tabindex="1" type="password" v-model="password"/>
+                    </label>
+                    <a class="si-hr-ln__toggle" role="button" tabindex="1" target="_self" v-on:click="showForgot" v-on:keyup.13="showForgot">
+
+                        <svg class="si-hr-ln__icon" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                            <!-- <defs><style>.cls-1{fill:none;}</style></defs> -->
+                            <title>Forgot Password Icon</title>
+                            <path class="si-hr-ln__icon--circle" d="M20,37.8A17.8,17.8,0,1,1,37.8,20,18,18,0,0,1,20,37.8Z"></path>
+                            <path class="si-hr-ln__icon--question" d="M20.7,19.4c1.3-1.1,2.4-1.6,2.4-3.1s-1.2-2.6-3.2-2.6a4.43,4.43,0,0,0-4.1,2.9l-2.6-1.4A7,7,0,0,1,20,10.7c4,0,6.4,2.2,6.4,5.3a5,5,0,0,1-2.5,4.5c-2.1,1.5-2.6,2-2.6,4.1v.5H18.4v-.7A5,5,0,0,1,20.7,19.4Zm-1,6.7a1.8,1.8,0,1,1-1.8,1.8,1.79,1.79,0,0,1,1.8-1.8Z"></path>
+                        </svg>
+                        <span class="si-hr-ln__forgot">Forgot password?</span>
+                    </a>
+                    <button class="si-hr-ln__submit" tabindex="1" type="submit" v-bind:disabled="querying">
+                        <span>Log in</span>
+                    </button>
+                </form>
+
+                <div class="si-hr-fg" v-cloak v-if="forgotActive">
+                    <div class="si-hr-fg__content">
+                        <div class="si-hr-fg__return">
+                            <a class="si-hr-fg__link" role="button" tabindex="1" v-on:click="showLogin" v-on:keyup.13="showLogin">
+                                ← Back
+                            </a>
+                        </div>
+                        <form action="/forgot" class="si-hr-fg__form" enctype="application/x-www-form-urlencoded" method="post" target="_self">
+                            <label class="si-hr-fg__label">
+                                Enter email to receive password reset link
+                                <input class="si-hr-fg__field" id="forgot.email" name="forgot.email" placeholder tabindex="1" value/>
+                            </label>
+                            <button class="si-hr-fg__submit" tabindex="1" type="submit" v-bind:disabled="querying">
+                                <span>Submit</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </transition>
+    </div>
+
+
+</header>
+
+
+
+<main class="po">
+
+    <!-- Post Banner -->
+
+
+
+
+
+    <!-- Post Article -->
+
+    <article class="po__article">
+
+
+
+
+
+        <header class="po-hr prt-y">
+
+            <footer class="po-hr-fl prt-x">
+
+
+                <div class="po-hr-fl__meta">
+
+                    <time class="po-hr-fl__date">10.27.2019</time>
+
+
+
+
+
+
+                    <ul class="po-hr-fl__taxonomies po-hr-fl__taxonomies--location">
+
+                        <li class="po-hr-fl__taxonomy">
+                            <a>Urban Development</a>
+                        </li>
+
+                    </ul>
+
+
+
+
+
+                    <ul class="po-hr-fl__taxonomies po-hr-fl__taxonomies--category">
+
+                        <li class="po-hr-fl__taxonomy">
+                            <a >Cars</a>
+                        </li>
+
+                        <li class="po-hr-fl__taxonomy">
+                            <a >Environment</a>
+                        </li>
+
+                        <li class="po-hr-fl__taxonomy">
+                            <a ">Eisenhower</a>
+                        </li>
+
+                    </ul>
+
+
+                </div>
+
+
+
+            </footer>
+
+
+
+            <section class="po-hr-cn prt-y">
+
+                <h1 class="po-hr-cn__title">Eisenhower's Horrible Highways</h1>
+
+                <div class="po-hr-cn__contributors">
+                    <dl class="po-hr-cn__authors">
+
+
+
+                        <dt class="po-hr-cn__byline">By</dt>
+
+
+
+                        <dd class="po-hr-cn__author">
+                            <a class="po-hr-cn__author-link">Parado-I</a>
+                        </dd>
+
+                    </dl>
+
+
+
+                </div>
+
+                <p class="po-hr-cn__dek" style="margin-top:0vh;">The Interstate Highway System is often praised as an example of a successful government program. Once digging below the surface-level, however, problems begin to arise.</p>
+            </section>
+
+
+
+
+
+            <figure class="po-hr-im prt-x">
+
+
+
+
+                <img alt class="po-hr-im__image" height="779" src="https://mtc.ca.gov/sites/default/files/images/interstate.jpg" width="1280"/>
+
+
+
+                <figcaption class="po-hr-im__caption">
+                    <p class="po-hr-im__description">America's car culture is slowly killing us all</p>
+                </figcaption>
+
+
+
+            </figure>
+
+
+
+
+        </header>
+
+
+
+        <div class="po__container">
+
+
+
+
+
+
+
+
+
+
+
+            <div class="po__main prt-y">
+
+                <!-- Post Sidebars -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </aside>
+
+
+                <!-- Post Content -->
+
+                <div class="po-cn wp po-wp" id="post-content">
+
+                    <!-- Antescript -->
+
+
+
+
+
+
+
+
+
+                    <!-- Intro -->
+
+                    <section class="po-cn__intro po-wp__intro" id="ch-0">
+
+
+
+                        <p>On June 29th 1956, President Dwight D. Eisenhower signed the National Interstate and Defense Highways Act into law. Since then, this has been <a href="https://archive.fortune.com/magazines/fortune/fortune_archive/2004/01/26/358835/index.htm">praised as one of the most successful government programs of the 20th century.</a> The Highways connected the country, and gave the individual the freedom to go where they wanted, when they wanted. What could possibly be so bad about it?
+						</p>
+                        <p>For our answer, we must look into the cities. Entire neighborhoods were decimated to make way for these new highways, the poor left behind in what was left while the rich left to find a life in the suburbs, using the new highways to commute to their workplace in the city. When trams and trolley cars stopped being the main method of commuting and became replaced by cars, the first problems began to arise. Suddenly, massive amounts of parking was needed to accommodate these cars. Traffic increased, and more highways were built while the current ones were expanded. Car culture, as it seems, took a stranglehold on the average working American as a result of these policies.                        
+						</p>
+                        <p>Urban Development wasn’t the only area where problems arose- race issues were deeply intertwined with the highway bill. When neighborhoods had to be destroyed, the local governments chose the ones that they found most problematic: black communities. These neighborhoods were paved right through the middle, with countless numbers of black people displaced. Because of the poverty these communities faced, they didn’t have the same luxury as white people to flee to the suburbs. Instead they were stuck finding new homes and new jobs, their old ones having been paved over. Timothy B. Lee describes the increase in crime caused by these policies:
+                        </p>
+                        <p class="quote">But tearing down a struggling neighborhood rarely made problems like crime and overcrowding go away. To the contrary, displaced people would move to other neighborhoods, often exacerbating overcrowding problems. Crime rates rose, not fell, in the years after these projects.
+                        </p>
+                        <p>The destruction of these communities caused by these highways was often fought, sometimes successfully. <a href="https://www.theguardian.com/books/2009/sep/12/jane-jacobs-new-york-history">Jane Jacobs led one of the most successful campaigns to combat these highways from destroying communities in New York City,</a> and was loved for her work. However, this action was the exception to the rule. 
+                        </p>
+                        <p>What can we do to rectify these problems caused by Eisenhower’s horrible Highways? To begin, we can encourage better urban development practices by relying on public transportation, as we once did. By building light rail, cars will no longer be a necessary part of the daily commute. By building American Bullet Trains, we will have no need to constantly maintain the <a href="https://www.fhwa.dot.gov/policyinformation/pubs/hf/pl11028/chapter1.cfm#targetText=Currently%2C%20the%20NHS%20includes%20over%20164%2C000%20miles%20of%20highways.&targetText=Approximately%20one%20percent%20of%20all,percent%20are%20in%20urban%20areas."> 164,000 miles of highway </a> in the United States, cutting that number by more than half. 
+                        </p>
+
+                    </section>
+
+
+
+
+                    <!-- Main Content -->
+
+
+
+
+
+
+
+
+
+                </div>
+
+                <footer class="po-fr">
+
+                    <!-- Republication Information -->
+
+
+
+
+
+                    <!-- Postscript -->
+
+
+
+
+
+                    <!-- Endmark -->
+
+                    <figure class="po-fr__endmark prt-x">
+
+                        <svg class="po-fr__image" viewBox="0 0 512 458" xmlns="http://www.w3.org/2000/svg">
+                            <title>End Mark</title>
+                            <polygon points="0 444 512 0 512 14 0 458 0 444"></polygon>
+                        </svg>
+                    </figure>
+
+                    <!-- Sharing -->
+
+
+
+                    <!-- Author(s) Bio -->
+
+                    <section class="po-fr__bio">
+                        <h1 class="po-fr__heading">About the Author</h1>
+
+                        <p class="po-fr__desc"> /u/Parado-I is the current Socialist Governor of the Atlantic and one of those Spearheading the Socialist movement. </p>
+
+
+
+
+
+
+
+
+
+
+
+                    </section>
+
+                    <section class="po-fr-tx">
+                        
+
+                        <div class="po-fr-tx__taxonomies">
+
+
+
+
+
+
+                            <ul class="po-fr-tx__taxonomy po-fr-tx__taxonomy--location">
+
+                                
+
+                            </ul>
+
+
+
+
+
+                            <ul class="po-fr-tx__taxonomy po-fr-tx__taxonomy--category">
+
+                              
+                            </ul>
+
+
+                        </div>
+
+                    </section>
+
+                </footer>
+
+
+            </div>
+
+        </div>
+
+
+
+
+
+        <div id="post-print">
+            <transition name="fadein">
+                <aside class="po-pr prt-x" v-cloak v-if="printActive">
+                    <a class="po-pr__close" v-on:click="closePanel">
+
+                        <svg class="po-pr__icon" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">=
+                            <title>Remove Icon</title>
+                            <line x1="7.17" x2="42.83" y1="7.17" y2="42.83"></line>
+                            <line x1="42.83" x2="7.17" y1="7.17" y2="42.83"></line>
+                        </svg>
+                        ESC
+                    </a>
+                    <div class="po-pr__container">
+                        <header class="po-pr__header">
+                            <h1 class="po-pr__heading">Select a text size</h1>
+                        </header>
+                        <div class="po-pr__main">
+                            <div class="po-pr__item">
+                                <h2 class="po-pr__subheading">
+                                    <a class="po-pr__button" v-on:click="setPrintSize('print-small')">
+                                        Small
+                                    </a>
+                                </h2>
+                                <div class="po-pr__text po-pr__text--s">
+                                    <p>In the weeks before Puerto Ricans rose up and took down governor Ricardo Rosselló this summer, educators on the island banded together to defeat a corrupt deal that would have destroyed their pensions. Now they’re organizing against a new version of the same rotten plan. The fight begs a basic question: Why is the American [&hellip;]</p>
+
+                                </div>
+                            </div>
+                            <div class="po-pr__item">
+                                <h2 class="po-pr__subheading">
+                                    <a class="po-pr__button" v-on:click="setPrintSize('print-medium')">
+                                        Medium
+                                    </a>
+                                </h2>
+                                <div class="po-pr__text po-pr__text--m">
+                                    <p>In the weeks before Puerto Ricans rose up and took down governor Ricardo Rosselló this summer, educators on the island banded together to defeat a corrupt deal that would have destroyed their pensions. Now they’re organizing against a new version of the same rotten plan. The fight begs a basic question: Why is the American [&hellip;]</p>
+
+                                </div>
+                            </div>
+                            <div class="po-pr__item">
+                                <h2 class="po-pr__subheading">
+                                    <a class="po-pr__button" v-on:click="setPrintSize('print-large')">
+                                        Large
+                                    </a>
+                                </h2>
+                                <div class="po-pr__text po-pr__text--l">
+                                    <p>In the weeks before Puerto Ricans rose up and took down governor Ricardo Rosselló this summer, educators on the island banded together to defeat a corrupt deal that would have destroyed their pensions. Now they’re organizing against a new version of the same rotten plan. The fight begs a basic question: Why is the American [&hellip;]</p>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </transition>
+        </div>
+
+
+    </article>
+
+
+
+
+
+    <div class="sr-at" style="display:none">
+        <aside class="sr-at__slot sr-at__slot--left prt-x">
+            <!-- /21690955159/jac_posts -->
+            <div id="div-gpt-ad-1530207829426-1">
+                <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+                googletag.cmd.push(function() { googletag.display('div-gpt-ad-1530207829426-1'); });
+            </script>
+            </div>
+        </aside>
+        <aside class="sr-at__slot sr-at__slot--left prt-x">
+            <!-- /21690955159/jac_posts2 -->
+            <div id="div-gpt-ad-1530207829426-2">
+                <script>
+                    googletag.cmd.push(function() { googletag.display('div-gpt-ad-1530207829426-2'); });
+                </script>
+            </div>
+        </aside>
+        <aside class="sr-at__slot sr-at__slot--left prt-x">
+            <!-- /21690955159/jac_posts3 -->
+            <div id="div-gpt-ad-1530207829426-3">
+                <script>
+                    googletag.cmd.push(function() { googletag.display('div-gpt-ad-1530207829426-3'); });
+                </script>
+            </div>
+        </aside>
+        <aside class="sr-at__slot sr-at__slot--left prt-x">
+            <!-- /21690955159/jac_posts4 -->
+            <div id="div-gpt-ad-1530207829426-4">
+                <script>
+                    googletag.cmd.push(function() { googletag.display('div-gpt-ad-1530207829426-4'); });
+                </script>
+            </div>
+        </aside>
+    </div>
+
+
+</main>
+
+
+<footer class="si-fr prt-x">
+
+    <section class="si-fr-ml" id="mailing-list-signup">
+        <h1 class="si-fr-ml__heading">Sign up for our mailing list</h1>
+        <form class="si-fr-ml__form" v-on:submit.prevent="signup">
+            <div class="si-fr-ml__formbox">
+                <input class="si-fr-ml__field" name="email" placeholder="Email Address Here" v-model="email"/>
+                <button class="si-fr-ml__submit" v-bind:disabled="querying">
+                    <span>Submit</span>
+                </button>
+                <p class="si-fr-ml__message" v-cloak v-if="state === 'failure'">This doesn't appear to be a valid email.</p>
+                <p class="si-fr-ml__message" v-cloak v-if="state === 'success'">Thanks for signing up!</p>
+            </div>
+        </form>
+    </section>
+
+    <a class="si-fr__frame" href="/">
+
+    </a>
+
+
+
+</footer>
+
+
+
+
+<script src="https://js.stripe.com/v3/"></script>
+<script src="/static/1569970862/js/jacobin.js" type="text/javascript"></script>
+
+
+</body>
+
+</html>
