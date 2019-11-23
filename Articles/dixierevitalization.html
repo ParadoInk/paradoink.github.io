@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+
+<head>
+<link rel="stylesheet" type="text/css" href="../main.css" />
+<link rel="stylesheet" type="text/css" href="../overrides.css" />
+<meta charset="UTF-8"/>
+<title>Bolshevik</title>
+</head>
+
+
+<body>
+
+
+<div id="page-helper">
+    <!-- this is here for Vue to bind to! Don't remove! -->
+</div>
+
+<header class="si-hr prt-x" id="site-header">
+    <div class="si-hr__container">
+
+        <!-- Logo -->
+
+        <div class="si-hr-lo">
+            <a class="si-hr-lo__container" href="https://paradoink.github.io/index.html" tabindex="1">
+
+
+                <h1 style="margin-left: 50px;">Bolshevik</h1>
+            </a>
+        </div>
+
+        <!-- Links -->
+
+
+
+        <ul class="si-hr-lk si-hr-lk--po">
+
+        <li class="si-hr-lk__item si-hr-lk__item--1">
+            <a class="si-hr-lk__link" href="https://discord.gg/5SVkfxk">Subscribe</a>
+        </li>
+
+
+        <li class="si-hr-lk__item si-hr-lk__item--2">
+            <a class="si-hr-lk__link" href="https://paradoink.github.io/Magazines/Eco.pdf">Magazine</a>
+        </li>
+        <li class="si-hr-lk__item si-hr-lk__item--3">
+            <a class="si-hr-lk__link" href="/donate">Donate</a>
+        </li>
+        <li class="si-hr-lk__item si-hr-lk__item--4">
+            <a class="si-hr-lk__link" href="http://catalyst-journal.com/">Catalyst</a>
+        </li>
+    </ul>
+
+
+
+    </div>
+
+    <div id="site-menu">
+        <transition name="fadein">
+            <div class="si-hr-mu" v-cloak v-if="menuActive">
+                <div class="si-hr-mu__container">
+                    <ul class="si-hr-mu__list">
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/subscribe" tabindex="1">Subscribe</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/storeissues" tabindex="1">Back Issues</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/donate" tabindex="1">Donate</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/store" tabindex="1">Store</a>
+                        </li>
+                    </ul>
+
+                    <ul class="si-hr-mu__list">
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/issue/war-is-a-racket" id="magazine-link" tabindex="1">Magazine</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/blog" tabindex="1">Blog</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="http://catalyst-journal.com/" tabindex="1">Catalyst</a>
+                        </li>
+                    </ul>
+
+                    <ul class="si-hr-mu__list">
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/about.html" tabindex="1">About</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/contact.html" tabindex="1">Contact Us</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/reading-groups" tabindex="1">Reading Groups</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/advertise.html" tabindex="1">Advertise</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </transition>
+    </div>
+
+
+    <div id="site-login">
+        <transition name="fadein">
+            <div class="si-hr-ln" v-cloak v-if="loginActive || forgotActive">
+
+                <form class="si-hr-ln__form" v-if="loginActive" v-on:submit.prevent="submitLogin">
+                    <div class="si-hr-ln__error" v-if="errors">
+                        {{ errors }}
+                    </div>
+                    <label class="si-hr-ln__label">
+                        Email
+                        <input class="si-hr-ln__field si-hr-ln__field--email" id="login.email" name="email" placeholder tabindex="1" v-model="email"/>
+                    </label>
+                    <label class="si-hr-ln__label">
+                        Password
+                        <input class="si-hr-ln__field si-hr-ln__field--password" id="login.password" name="password" placeholder tabindex="1" type="password" v-model="password"/>
+                    </label>
+                    <a class="si-hr-ln__toggle" role="button" tabindex="1" target="_self" v-on:click="showForgot" v-on:keyup.13="showForgot">
+
+                        <svg class="si-hr-ln__icon" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                            <!-- <defs><style>.cls-1{fill:none;}</style></defs> -->
+                            <title>Forgot Password Icon</title>
+                            <path class="si-hr-ln__icon--circle" d="M20,37.8A17.8,17.8,0,1,1,37.8,20,18,18,0,0,1,20,37.8Z"></path>
+                            <path class="si-hr-ln__icon--question" d="M20.7,19.4c1.3-1.1,2.4-1.6,2.4-3.1s-1.2-2.6-3.2-2.6a4.43,4.43,0,0,0-4.1,2.9l-2.6-1.4A7,7,0,0,1,20,10.7c4,0,6.4,2.2,6.4,5.3a5,5,0,0,1-2.5,4.5c-2.1,1.5-2.6,2-2.6,4.1v.5H18.4v-.7A5,5,0,0,1,20.7,19.4Zm-1,6.7a1.8,1.8,0,1,1-1.8,1.8,1.79,1.79,0,0,1,1.8-1.8Z"></path>
+                        </svg>
+                        <span class="si-hr-ln__forgot">Forgot password?</span>
+                    </a>
+                    <button class="si-hr-ln__submit" tabindex="1" type="submit" v-bind:disabled="querying">
+                        <span>Log in</span>
+                    </button>
+                </form>
+
+                <div class="si-hr-fg" v-cloak v-if="forgotActive">
+                    <div class="si-hr-fg__content">
+                        <div class="si-hr-fg__return">
+                            <a class="si-hr-fg__link" role="button" tabindex="1" v-on:click="showLogin" v-on:keyup.13="showLogin">
+                                ← Back
+                            </a>
+                        </div>
+                        <form action="/forgot" class="si-hr-fg__form" enctype="application/x-www-form-urlencoded" method="post" target="_self">
+                            <label class="si-hr-fg__label">
+                                Enter email to receive password reset link
+                                <input class="si-hr-fg__field" id="forgot.email" name="forgot.email" placeholder tabindex="1" value/>
+                            </label>
+                            <button class="si-hr-fg__submit" tabindex="1" type="submit" v-bind:disabled="querying">
+                                <span>Submit</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </transition>
+    </div>
+
+
+</header>
+
+
+
+<main class="po">
+
+    <!-- Post Banner -->
+
+
+
+
+
+    <!-- Post Article -->
+
+    <article class="po__article">
+
+
+
+
+
+        <header class="po-hr prt-y">
+
+            <footer class="po-hr-fl prt-x">
+
+
+                <div class="po-hr-fl__meta">
+
+                    <time class="po-hr-fl__date">11.22.19</time>
+
+
+
+
+
+
+                    <ul class="po-hr-fl__taxonomies po-hr-fl__taxonomies--location">
+
+                        <li class="po-hr-fl__taxonomy">
+                            <a>Socialism</a>
+                        </li>
+
+                    </ul>
+
+
+
+
+
+                    <ul class="po-hr-fl__taxonomies po-hr-fl__taxonomies--category">
+
+                        <li class="po-hr-fl__taxonomy">
+                            <a >Policies</a>
+                        </li>
+
+                        <li class="po-hr-fl__taxonomy">
+                            <a >Dixie</a>
+                        </li>
+
+                        <li class="po-hr-fl__taxonomy">
+                            <a ">Socialism</a>
+                        </li>
+
+                    </ul>
+
+
+                </div>
+
+
+
+            </footer>
+
+
+
+            <section class="po-hr-cn prt-y">
+
+                <h1 class="po-hr-cn__title">Dixie Revitalization is a Socialist Goal.</h1>
+
+                <div class="po-hr-cn__contributors">
+                    <dl class="po-hr-cn__authors">
+
+
+
+                        <dt class="po-hr-cn__byline">By</dt>
+
+
+
+                        <dd class="po-hr-cn__author">
+                            <a class="po-hr-cn__author-link">Banana_Republic_</a>
+                        </dd>
+
+                    </dl>
+
+
+
+                </div>
+
+                <p class="po-hr-cn__dek">Dixie has been neglected for far too long. It is time to pay it some attention.</p>
+            </section>
+
+
+
+
+
+            <figure class="po-hr-im prt-x">
+
+
+
+
+                <img alt class="po-hr-im__image" height="779" src="https://www.splcenter.org/sites/default/files/page_images/SPLC-Fighting-Hate-1280x720.jpg" width="1280"/>
+
+
+
+                <figcaption class="po-hr-im__caption">
+                    <p class="po-hr-im__description">Alt Right Protestors in Dixie.</p>
+                </figcaption>
+
+
+
+            </figure>
+
+
+
+
+        </header>
+
+
+
+        <div class="po__container">
+
+
+
+
+
+
+
+
+
+
+
+            <div class="po__main prt-y">
+
+                <!-- Post Sidebars -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </aside>
+
+
+                <!-- Post Content -->
+
+                <div class="po-cn wp po-wp" id="post-content">
+
+                    <!-- Antescript -->
+
+
+
+
+
+
+
+
+
+                    <!-- Intro -->
+
+                    <section class="po-cn__intro po-wp__intro" id="ch-0">
+
+
+
+                        <p>Dixie has always been stereotypically seen as the “poor” and “backwater” section of the United States. Whether it be the image of the Alabama redneck with a trucker’s hat and a wife beater or the poor black family living in the inner cities of Mississippi, Dixie has been viewed as socially backwater, as a section of the country to be pitied and, depending on one’s point of view, to be scorned. A place to be educated by well intentioned Northerners on the importance of social liberalism.</p>
+                        <p>But these Northerners ignore the realities of Dixie’s economics. There is a reason why racism continues to affect this state, and why we have always been economically behind the rest of the country. One cannot end these values of Dixie citizens without eliminating the economic realities that underpin its existence in the first place. </p>
+                        <p>But such a thing can only be done when one looks at materialism and not idealism. Material influences the ideals of a society. There may be a feedback loop, but the material conditions are the originator of all ideals. </p>
+                        <p>So, what are these material conditions? </p>
+                        <p>In 2017, the average province poverty rate for Dixie was 18.26%<sup>1</sup>. It is particularly bad in deeper southern states such as Missisppi, Louisiana and Alabama which have a poverty rate of 19.8, 19.7 and 16.9 percent rate respectively. Louisiana actually had their poverty rate increased by 0.3 percent. Only Georgia had their poverty rate decrease over 10 percent within the 2014 to 2017 range. </p>
+                        <p>For context, the national poverty rate was 13.6 in 2016. <sup>2</sup></p>
+                        <p>In terms of healthiness we make up seven of the bottom ten provinces according to the United Health Foundation. We also have the highest premature death rate, with the majority of Dixie by county have a life expectancy of 74 years or under. We have fewer Primary Care physicians than the national average of 149.7 physicians per 100,000 people, while our state with the highest number of such physicians, Florida, only has 131.6 per 100,000. <sup>3</sup></p>
+                        <p>Infrastructure wise, Dixie is a disaster. The American Society of Civil Engineers’ highest grade for our infrastructure among our provinces is Georgia with a C+. Meanwhile, our lowest score is Mississippi, Arkansas, and Louisiana at a D+. <sup>4</sup>  Breaking it down by individual infrastructure project reveals an even worse picture of our infrastructure. Road wise our highest grade is a C+ in Georgia and our lowest is a D with various different states, including Texas and Louisiana. We have an awful waste disposal rating, with none above a C+. Our highest drinking water rating is a B- in, again, Georgia.</p>
+                        <p>The American Dream is another thing in short supply for citizens of Dixie. The three deep states, Mississippi, Alabama and Georgia have the least amount of children rising from the bottom fifth to the top fifth of income earners of the country. 77 percent of Southerners said they were not confident that their children would have a better future for their children. <sup>5</sup></p>
+                        <p>Education is, similarly, in dire straits. Our K-12 educational services are suffering greatly. A non-partisan report, issued by the Columbia Group, a collection of groups that work within Chesapeake and Dixie. It’s findings were:</p>
+                        <p class="quote">
+                            - 74 percent of voters in the South saw differences in their states in how well students are educated, saying their states do not adequately educate all students. Only 13 percent said all schools in their states do an adequate job. Another 13 percent did not know.
+                            - 64 percent of voters saw differences in how schools are funded across their states.
+                            - 85 percent of voters supported ‘improving public schools by addressing differences in the quality of education across all schools’
+                            - 34 percent claimed public schools were getting worse.
+                            - Only 9 percent of students of low income learners were prepared for college level work, while 54 percent of all other students were prepared for college level work.
+                            <sup>6</sup>
+                        </p>
+                        <p>Meanwhile, we have some of the worst income inequality in the entire country. Province by province, we have the greatest divide between our highest and lowest earners. Louisiana is third , with the highest inequality between the rich and the poor. Oklahoma was the least, at twenty-third.<sup>7</sup></p>
+                        <p>Dixie is, based off this data, is the poorest, least educated, most economically divided, and, most significantly, an underdeveloped region of the United States. While the rest of our country continues to move forward, the south languishes as the poorest members of our society rot away. The rich and powerful continue to exploit them. </p>
+                        <p>The state of Dixie has done much in trying to prevent this. During our last Assembly, we passed a public option for citizens of Dixie in need of healthcare. We expanded funding towards education. <sup>8</sup> Two assemblies prior, Medicaid was finally expanded, and the minimum wage was increased from $7.25 to $12.00 an hour.<sup>9</sup></p>
+                        <p>But there’s only so much that can be done. The fact is, the state of Dixie does not have the resources needed to truly invigorate the infrastructure, revitalize it, and make it apart of the 21st century. Only the federal government, with an income tax, a capital gains tax, and other sources of revenue, can we expect to truly reform and assist the great state of Dixie. </p>
+                        <p>The Federal government can do many great things. It can eliminate the barriers that the federal government has placed on welfare reform, specifically under the ‘welfare reform’ of the Clinton administration. It can expand access to healthcare through a universal program, hiring doctors where they are needed. It can spend on infrastructure programs that can employee and pay well the thousands of people in this country who desperately need jobs. It can spend on the educational infrastructure of the south, expanding the hiring of teachers and increasing their salaries. It will cost a lot of money, and will require a lot of cooperation between Dixie and the federal government, but it can be done. </p>
+                        <p>This is not just a humanitarian goal, but a socialist goal as well. Under this system, we can achieve an element of full employment within the state of Dixie. We can eliminate, or at the very least lower, the amount of income inequality within the state. We can expand universal access to basic human needs: food, water, clothing, and healthcare. We can finally show the people of Dixie that left wing programs can work, and that socialist policies can work if we work together, arms locked in solidarity. </p>
+                        <p>Socialism can be a powerful in Dixie. Dixie can be at the forefront of education, of healthcare, and of the policies of basic human kindness among all mankind. We aren’t the supposed hicks and rednecks that the Northerners believe us to be. We are human beings. We deserve to be treated like them.</p>
+                        <p class="quote">
+                            <sup>1</sup> This was accomplished through taking the 2017 province poverty rate and averaging them together. https://www.slcatlanta.org/research/index.php?pub=580
+                            <sup>2</sup> https://www.dailymail.co.uk/news/article-6164755/Southern-states-remain-poorest-U-S-national-poverty-rate-continues-fall.html
+                            <sup>3</sup> https://www.vice.com/en_us/article/59kb4b/why-is-the-south-less-healthy
+                            <sup>4</sup> https://www.infrastructurereportcard.org/state-by-state-infrastructure/
+                            <sup>5</sup> https://prospect.org/civil-rights/report-south-urgently-needs-infrastructure-opportunity/
+                            <sup>6</sup> https://www.ncforum.org/wp-content/uploads/2018/01/Columbia-Group-Brochure_Final_R1.pdf
+                            <sup>7</sup> https://www.zippia.com/advice/states-highest-lowest-income-inequality/
+                            <sup>8</sup> https://docs.google.com/document/d/15auWdqZuftkrYlFLlzHF-S956fWTi4O-WMZ_rJTB-ow/edit
+                            <sup>9</sup> https://docs.google.com/document/d/1QoGO9oxRatClrVYNPog2zHsYuUi9ikfCitXT6q3X1i8/edit
+                        </p>
+
+                    </section>
+
+
+
+
+                    <!-- Main Content -->
+
+
+
+
+
+
+
+
+
+                </div>
+
+                <footer class="po-fr">
+
+                    <!-- Republication Information -->
+
+
+
+
+
+                    <!-- Postscript -->
+
+
+
+
+
+                    <!-- Endmark -->
+
+                    <figure class="po-fr__endmark prt-x">
+
+                        <svg class="po-fr__image" viewBox="0 0 512 458" xmlns="http://www.w3.org/2000/svg">
+                            <title>End Mark</title>
+                            <polygon points="0 444 512 0 512 14 0 458 0 444"></polygon>
+                        </svg>
+                    </figure>
+
+                    <!-- Sharing -->
+
+
+
+                    <!-- Author(s) Bio -->
+
+                    <section class="po-fr__bio">
+                        <h1 class="po-fr__heading">About the Author</h1>
+
+                        <p class="po-fr__desc"> /u/Banana_Republic_ is a Socialist at the forefront of the movement in Dixie, currently running for DX-2 against Flam. </p>
+
+
+
+
+
+
+
+
+
+
+
+                    </section>
+
+                    <section class="po-fr-tx">
+                        
+
+                        <div class="po-fr-tx__taxonomies">
+
+
+
+
+
+
+                            <ul class="po-fr-tx__taxonomy po-fr-tx__taxonomy--location">
+
+                                
+
+                            </ul>
+
+
+
+
+
+                            <ul class="po-fr-tx__taxonomy po-fr-tx__taxonomy--category">
+
+                              
+                            </ul>
+
+
+                        </div>
+
+                    </section>
+
+                </footer>
+
+
+            </div>
+
+        </div>
+
+
+
+
+
+        <div id="post-print">
+            <transition name="fadein">
+                <aside class="po-pr prt-x" v-cloak v-if="printActive">
+                    <a class="po-pr__close" v-on:click="closePanel">
+
+                        <svg class="po-pr__icon" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">=
+                            <title>Remove Icon</title>
+                            <line x1="7.17" x2="42.83" y1="7.17" y2="42.83"></line>
+                            <line x1="42.83" x2="7.17" y1="7.17" y2="42.83"></line>
+                        </svg>
+                        ESC
+                    </a>
+                    <div class="po-pr__container">
+                        <header class="po-pr__header">
+                            <h1 class="po-pr__heading">Select a text size</h1>
+                        </header>
+                        <div class="po-pr__main">
+                            <div class="po-pr__item">
+                                <h2 class="po-pr__subheading">
+                                    <a class="po-pr__button" v-on:click="setPrintSize('print-small')">
+                                        Small
+                                    </a>
+                                </h2>
+                                <div class="po-pr__text po-pr__text--s">
+                                    <p>In the weeks before Puerto Ricans rose up and took down governor Ricardo Rosselló this summer, educators on the island banded together to defeat a corrupt deal that would have destroyed their pensions. Now they’re organizing against a new version of the same rotten plan. The fight begs a basic question: Why is the American [&hellip;]</p>
+
+                                </div>
+                            </div>
+                            <div class="po-pr__item">
+                                <h2 class="po-pr__subheading">
+                                    <a class="po-pr__button" v-on:click="setPrintSize('print-medium')">
+                                        Medium
+                                    </a>
+                                </h2>
+                                <div class="po-pr__text po-pr__text--m">
+                                    <p>In the weeks before Puerto Ricans rose up and took down governor Ricardo Rosselló this summer, educators on the island banded together to defeat a corrupt deal that would have destroyed their pensions. Now they’re organizing against a new version of the same rotten plan. The fight begs a basic question: Why is the American [&hellip;]</p>
+
+                                </div>
+                            </div>
+                            <div class="po-pr__item">
+                                <h2 class="po-pr__subheading">
+                                    <a class="po-pr__button" v-on:click="setPrintSize('print-large')">
+                                        Large
+                                    </a>
+                                </h2>
+                                <div class="po-pr__text po-pr__text--l">
+                                    <p>In the weeks before Puerto Ricans rose up and took down governor Ricardo Rosselló this summer, educators on the island banded together to defeat a corrupt deal that would have destroyed their pensions. Now they’re organizing against a new version of the same rotten plan. The fight begs a basic question: Why is the American [&hellip;]</p>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </transition>
+        </div>
+
+
+    </article>
+
+
+
+
+
+    <div class="sr-at" style="display:none">
+        <aside class="sr-at__slot sr-at__slot--left prt-x">
+            <!-- /21690955159/jac_posts -->
+            <div id="div-gpt-ad-1530207829426-1">
+                <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+                googletag.cmd.push(function() { googletag.display('div-gpt-ad-1530207829426-1'); });
+            </script>
+            </div>
+        </aside>
+        <aside class="sr-at__slot sr-at__slot--left prt-x">
+            <!-- /21690955159/jac_posts2 -->
+            <div id="div-gpt-ad-1530207829426-2">
+                <script>
+                    googletag.cmd.push(function() { googletag.display('div-gpt-ad-1530207829426-2'); });
+                </script>
+            </div>
+        </aside>
+        <aside class="sr-at__slot sr-at__slot--left prt-x">
+            <!-- /21690955159/jac_posts3 -->
+            <div id="div-gpt-ad-1530207829426-3">
+                <script>
+                    googletag.cmd.push(function() { googletag.display('div-gpt-ad-1530207829426-3'); });
+                </script>
+            </div>
+        </aside>
+        <aside class="sr-at__slot sr-at__slot--left prt-x">
+            <!-- /21690955159/jac_posts4 -->
+            <div id="div-gpt-ad-1530207829426-4">
+                <script>
+                    googletag.cmd.push(function() { googletag.display('div-gpt-ad-1530207829426-4'); });
+                </script>
+            </div>
+        </aside>
+    </div>
+
+
+</main>
+
+
+<footer class="si-fr prt-x">
+
+    <section class="si-fr-ml" id="mailing-list-signup">
+        <h1 class="si-fr-ml__heading">Sign up for our mailing list</h1>
+        <form class="si-fr-ml__form" v-on:submit.prevent="signup">
+            <div class="si-fr-ml__formbox">
+                <input class="si-fr-ml__field" name="email" placeholder="Email Address Here" v-model="email"/>
+                <button class="si-fr-ml__submit" v-bind:disabled="querying">
+                    <span>Submit</span>
+                </button>
+                <p class="si-fr-ml__message" v-cloak v-if="state === 'failure'">This doesn't appear to be a valid email.</p>
+                <p class="si-fr-ml__message" v-cloak v-if="state === 'success'">Thanks for signing up!</p>
+            </div>
+        </form>
+    </section>
+
+    <a class="si-fr__frame" href="/">
+
+    </a>
+
+
+
+</footer>
+
+
+
+
+<script src="https://js.stripe.com/v3/"></script>
+<script src="/static/1569970862/js/jacobin.js" type="text/javascript"></script>
+
+
+</body>
+
+</html>
