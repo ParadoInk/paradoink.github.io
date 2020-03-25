@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+
+<head>
+<link rel="stylesheet" type="text/css" href="../main.css" />
+<link rel="stylesheet" type="text/css" href="../overrides.css" />
+<meta charset="UTF-8"/>
+<title>Bolshevik</title>
+</head>
+
+
+<body>
+
+
+<div id="page-helper">
+    <!-- this is here for Vue to bind to! Don't remove! -->
+</div>
+
+<header class="si-hr prt-x" id="site-header">
+    <div class="si-hr__container">
+
+        <!-- Logo -->
+
+        <div class="si-hr-lo">
+            <a class="si-hr-lo__container" href="https://paradoink.github.io/index.html" tabindex="1">
+
+
+                <h1 style="margin-left: 50px;">Bolshevik</h1>
+            </a>
+        </div>
+
+        <!-- Links -->
+
+
+
+        <ul class="si-hr-lk si-hr-lk--po">
+
+        <li class="si-hr-lk__item si-hr-lk__item--1">
+            <a class="si-hr-lk__link" href="https://discord.gg/5SVkfxk">Subscribe</a>
+        </li>
+
+
+        <li class="si-hr-lk__item si-hr-lk__item--2">
+            <a class="si-hr-lk__link" href="https://paradoink.github.io/Magazines/Eco.pdf">Magazine</a>
+        </li>
+        <li class="si-hr-lk__item si-hr-lk__item--3">
+            <a class="si-hr-lk__link" href="/donate">Donate</a>
+        </li>
+        <li class="si-hr-lk__item si-hr-lk__item--4">
+            <a class="si-hr-lk__link" href="http://catalyst-journal.com/">Catalyst</a>
+        </li>
+    </ul>
+
+
+
+    </div>
+
+    <div id="site-menu">
+        <transition name="fadein">
+            <div class="si-hr-mu" v-cloak v-if="menuActive">
+                <div class="si-hr-mu__container">
+                    <ul class="si-hr-mu__list">
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/subscribe" tabindex="1">Subscribe</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/storeissues" tabindex="1">Back Issues</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/donate" tabindex="1">Donate</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/store" tabindex="1">Store</a>
+                        </li>
+                    </ul>
+
+                    <ul class="si-hr-mu__list">
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/issue/war-is-a-racket" id="magazine-link" tabindex="1">Magazine</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/blog" tabindex="1">Blog</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="http://catalyst-journal.com/" tabindex="1">Catalyst</a>
+                        </li>
+                    </ul>
+
+                    <ul class="si-hr-mu__list">
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/about.html" tabindex="1">About</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/contact.html" tabindex="1">Contact Us</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/reading-groups" tabindex="1">Reading Groups</a>
+                        </li>
+                        <li class="si-hr-mu__item">
+                            <a class="si-hr-mu__link" href="/advertise.html" tabindex="1">Advertise</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </transition>
+    </div>
+
+
+    <div id="site-login">
+        <transition name="fadein">
+            <div class="si-hr-ln" v-cloak v-if="loginActive || forgotActive">
+
+                <form class="si-hr-ln__form" v-if="loginActive" v-on:submit.prevent="submitLogin">
+                    <div class="si-hr-ln__error" v-if="errors">
+                        {{ errors }}
+                    </div>
+                    <label class="si-hr-ln__label">
+                        Email
+                        <input class="si-hr-ln__field si-hr-ln__field--email" id="login.email" name="email" placeholder tabindex="1" v-model="email"/>
+                    </label>
+                    <label class="si-hr-ln__label">
+                        Password
+                        <input class="si-hr-ln__field si-hr-ln__field--password" id="login.password" name="password" placeholder tabindex="1" type="password" v-model="password"/>
+                    </label>
+                    <a class="si-hr-ln__toggle" role="button" tabindex="1" target="_self" v-on:click="showForgot" v-on:keyup.13="showForgot">
+
+                        <svg class="si-hr-ln__icon" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                            <!-- <defs><style>.cls-1{fill:none;}</style></defs> -->
+                            <title>Forgot Password Icon</title>
+                            <path class="si-hr-ln__icon--circle" d="M20,37.8A17.8,17.8,0,1,1,37.8,20,18,18,0,0,1,20,37.8Z"></path>
+                            <path class="si-hr-ln__icon--question" d="M20.7,19.4c1.3-1.1,2.4-1.6,2.4-3.1s-1.2-2.6-3.2-2.6a4.43,4.43,0,0,0-4.1,2.9l-2.6-1.4A7,7,0,0,1,20,10.7c4,0,6.4,2.2,6.4,5.3a5,5,0,0,1-2.5,4.5c-2.1,1.5-2.6,2-2.6,4.1v.5H18.4v-.7A5,5,0,0,1,20.7,19.4Zm-1,6.7a1.8,1.8,0,1,1-1.8,1.8,1.79,1.79,0,0,1,1.8-1.8Z"></path>
+                        </svg>
+                        <span class="si-hr-ln__forgot">Forgot password?</span>
+                    </a>
+                    <button class="si-hr-ln__submit" tabindex="1" type="submit" v-bind:disabled="querying">
+                        <span>Log in</span>
+                    </button>
+                </form>
+
+                <div class="si-hr-fg" v-cloak v-if="forgotActive">
+                    <div class="si-hr-fg__content">
+                        <div class="si-hr-fg__return">
+                            <a class="si-hr-fg__link" role="button" tabindex="1" v-on:click="showLogin" v-on:keyup.13="showLogin">
+                                ← Back
+                            </a>
+                        </div>
+                        <form action="/forgot" class="si-hr-fg__form" enctype="application/x-www-form-urlencoded" method="post" target="_self">
+                            <label class="si-hr-fg__label">
+                                Enter email to receive password reset link
+                                <input class="si-hr-fg__field" id="forgot.email" name="forgot.email" placeholder tabindex="1" value/>
+                            </label>
+                            <button class="si-hr-fg__submit" tabindex="1" type="submit" v-bind:disabled="querying">
+                                <span>Submit</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </transition>
+    </div>
+
+
+</header>
+
+
+
+<main class="po">
+
+    <!-- Post Banner -->
+
+
+
+
+
+    <!-- Post Article -->
+
+    <article class="po__article">
+
+
+
+
+
+        <header class="po-hr prt-y">
+
+            <footer class="po-hr-fl prt-x">
+
+
+                <div class="po-hr-fl__meta">
+
+                    <time class="po-hr-fl__date">3.24.20</time>
+
+
+
+
+
+
+                    <ul class="po-hr-fl__taxonomies po-hr-fl__taxonomies--location">
+
+                        <li class="po-hr-fl__taxonomy">
+                            <a>Socialism</a>
+                        </li>
+
+                    </ul>
+
+
+
+
+
+                    <ul class="po-hr-fl__taxonomies po-hr-fl__taxonomies--category">
+
+                        <li class="po-hr-fl__taxonomy">
+                            <a >2020 Election</a>
+                        </li>
+
+                        <li class="po-hr-fl__taxonomy">
+                            <a >President</a>
+                        </li>
+
+                        <li class="po-hr-fl__taxonomy">
+                            <a ">Electoralism</a>
+                        </li>
+
+                    </ul>
+
+
+                </div>
+
+
+
+            </footer>
+
+
+
+            <section class="po-hr-cn prt-y">
+
+                <h1 class="po-hr-cn__title">The Case For a One State Solution</h1>
+
+                <div class="po-hr-cn__contributors">
+                    <dl class="po-hr-cn__authors">
+
+
+
+                        <dt class="po-hr-cn__byline">By</dt>
+
+
+
+                        <dd class="po-hr-cn__author">
+                            <a class="po-hr-cn__author-link">Parado-I</a>
+                        </dd>
+
+                    </dl>
+
+
+
+                </div>
+
+                <p class="po-hr-cn__dek">The last time a serious candidate outside of the two-party dichotomy ran was Ross Perot in 1992. The American people are ready once again.</p>
+            </section>
+
+
+
+
+
+            <figure class="po-hr-im prt-x">
+
+
+
+
+                <img alt class="po-hr-im__image" height="779" src="https://upload.wikimedia.org/wikipedia/commons/a/a7/ElectoralCollege1836.svg" width="1280"/>
+
+
+
+                <figcaption class="po-hr-im__caption">
+                    <p class="po-hr-im__description">1836 Electoral Map</p>
+                </figcaption>
+
+
+
+            </figure>
+
+
+
+
+        </header>
+
+
+
+        <div class="po__container">
+
+
+
+
+
+
+
+
+
+
+
+            <div class="po__main prt-y">
+
+                <!-- Post Sidebars -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </aside>
+
+
+                <!-- Post Content -->
+
+                <div class="po-cn wp po-wp" id="post-content">
+
+                    <!-- Antescript -->
+
+
+
+
+
+
+
+
+
+                    <!-- Intro -->
+
+                    <section class="po-cn__intro po-wp__intro" id="ch-0">
+
+
+
+                        <p>I am running for President of the United States. These are words you have heard many times before, including from me, and will hear many times again. However, one thing makes my run different: I am running to win just a single state. This is a totally unorthodox decision to make- or is it? In this article, I am going to be examining the history, potential, and precedent set around this strategy.</p>
+                        <p>First, the history. It is very rare that a candidate has ever tried to win only a small handful of electoral votes in the past, but it absolutely has happened. The most recent example would be in the 1968 election between Richard Nixon and Hubert Humphrey. Nixon, Congressman and later Senator from California, was nowhere near a segregationist. Although his tapes reveal quite the history of racism<sup>1</sup>, he had voted for both the Civil Rights Act of 1964 and the Voting Rights Act of 1965<sup>2</sup>, the two bills the southern segregationists did absolutely everything to defeat, including an over 24-hour long filibuster. On the Democratic side was an even worse pick for the southern segregationists. Hubert Humphrey, although having fallen from the left's grace with his association with the Vietnam war and his time as Vice President with Johnson, was still a left-wing standard-bearer from Minnesota. He was even pivotal in getting the Civil Rights Plank added to the 1948 Democratic Platform<sup>3</sup>. To Southern Segregationists, the 1968 Democratic National Convention Protests were nothing more than fighting within the left, not fighting between the left and right. To who, then, could they turn to? Nixon was not an option and Humphrey certainly was not an option, so they turned to a third party candidate: George Wallace. Wallace knew he had no hope at winning a majority of electoral votes, and that was never his goal. He aimed to only win a small selection of states in the south, a goal he accomplished. In the end, he won five states, all in modern-day Dixie: Arkansas, Louisiana, Mississippi, Alabama, and Georgia. His goal of a hung electoral vote was not seen, however, as Humphrey had a humiliating defeat. However, had Nixon performed just a small bit worse, the 45 pledged electors- and one faithless elector- that Wallace received would have made the difference. This pattern was seen in 1960 and 1948 where Southern Democrats ran candidates more racist than the two major parties, hoping to throw the election to the House, forever unsuccessfully. However, I do not liken myself to these racists. Although at the surface-level our strategies may appear to be the same, their roots are wildly different. Altohugh useful to learn from, they are nothing to model off of.</p>
+                        <p>Moving further back in history, there are certainly times when third-party runs had incredibly interesting and impactful results. 1912 and 1860 are two that instantly spring to the forefront of any conversation on this subject. However, they are all lacking the singular quality I am here analyzing: attempting to win only a handful of states as a third party candidate. So, putting aside the racist southerners throughout the 20th century, we arrive at one last election: 1836. For some historical context, Andrew Jackson had just swept the nation with his new Democratic Party with fundamentally different ideas of Mass Democracy and breaking up the National Bank, among other things. In 1836, Andrew Jackson had stepped down after two terms and Martin Van Buren was left as his Democratic Successor. In an attempt to stop the overwhelming Democratic popularity, the newly formed Whig party ran four different candidates across the country to try and win just a few states each, all with regional appeal, to throw the election to the Anti-Democratic House of Representatives. This broadly worked. The Southernor Willie P. Magnum won in South Carolina, the Northerner Daniel Webster won his home state of Massachusetts, the Westerner Hugh L. White won his home state of Tennessee and Georgia, and war hero with more broad support William Henry Harrison won his home state of Ohio as well as Indiana, Kentucky, Maryland, New Jersey, and Vermont. Although they fell short 22 electoral votes- about a 1% swing in Pennsylvania would have done the trick- the idea was there, and they were within striking distance of the Presidency as a result. This is the model I am working off of. With a strong base of regional support, singular long-shot candidates can go a long way, and with a lot of time, effort, and a bit of luck, the election can be completely flipped on its head.</p>
+                        <p>So, now with the knowledge of history freshly under our belts, we can look at the present: can I, Parado-I, win the presidency with just a singular state voting for me? History tentatively says yes. It is absolutely possible for a purely regional candidate to win electoral votes, and it is possible for these candidates to work in tandem to try and ensure their opponent does not win. On our side, we have yet another bonus: there are only five states. With such a small amount of states, winning just one is far more impactful than winning just one out of 25 or 50. winning just one gives us almost one fifth of the bargaining power in the Electoral College, and in a tight election, that can make the difference. Last Presidential Election we saw HurricaneOFlies win Lincoln and Chesapeake, with Gunnz winning Atlantic and Dixie, the entire election thus hinging on the key swing state of Sierra. Although Hurricane won the popluar vote, Sierra swung for Gunnz and he won. If the election were to be this close again, a single state would throw it to the house, and do so easily. Looking at the three Presidential elections that have happened since the states were consolidated, in the first and most recent did the winning candidate only win 3 out of 5 states, Dobs similarly losing Sierra to GuiltyAir over a year ago. If this trend is to hold for this upcoming election, the Presidency would be thrown to the House of Representatives, where the chaos could mean anyone wins: Gunnz, a Democrat, or, ideally, me.</p>
+                        <p>Now we must lastly observe the precedent this would set for the future. If this strategy were to prove unsuccessful, frankly, nothing would change. My election would simply be added to the failures of the Whigs and the segregationists, and perhaps one day someone else would try again. However, what if my strategy worked? What if I even won? What I posit we would likely see is a vast amount of people trying to do similar things. People not only from the Democrats and Republicans, but from the Socialists, and from any other party as well. What this would bring would be more ideological diversity, more partisan diversity. Where for decades the current choice for President has been Democrat or Republican, now we could choose anyone we truly agree with. In the 2016 election, an often lament among the average voter was that they were being forced to choose between a "lesser of two evils", and that problem will remain as long as there are only two candidates for a majority of voters. My success would mean more diversity in the future- possibly even a communist party success. This future is absolutely a bright one for everyone outside of the Republican-Democratic dichotomy.</p>
+                        <p>I am running to be the next President of the United States, and I am running to win just the Atlantic Commonwealth. I hope you all will support me.</p>
+                        <sup>1</sup> https://www.nixonlibrary.gov/white-house-tapes/
+                        <br>
+                        <sup>2</sup> https://www.nixonfoundation.org/2017/08/nixons-record-civil-rights-2/
+                        <br>
+                        <sup>3</sup> https://www.senate.gov/artandhistory/history/minute/hubert_humphrey_centennial.htm
+                    </section>
+
+
+
+
+                    <!-- Main Content -->
+
+
+
+
+
+
+
+
+
+                </div>
+
+                <footer class="po-fr">
+
+                    <!-- Republication Information -->
+
+
+
+
+
+                    <!-- Postscript -->
+
+
+
+
+
+                    <!-- Endmark -->
+
+                    <figure class="po-fr__endmark prt-x">
+
+                        <svg class="po-fr__image" viewBox="0 0 512 458" xmlns="http://www.w3.org/2000/svg">
+                            <title>End Mark</title>
+                            <polygon points="0 444 512 0 512 14 0 458 0 444"></polygon>
+                        </svg>
+                    </figure>
+
+                    <!-- Sharing -->
+
+
+
+                    <!-- Author(s) Bio -->
+
+                    <section class="po-fr__bio">
+                        <h1 class="po-fr__heading">About the Author</h1>
+
+                        <p class="po-fr__desc"> /u/Parado-I is a current Presidential Candidate running to win the Socialist Party Nomination. </p>
+
+
+
+
+
+
+
+
+
+
+
+                    </section>
+
+                    <section class="po-fr-tx">
+                        
+
+                        <div class="po-fr-tx__taxonomies">
+
+
+
+
+
+
+                            <ul class="po-fr-tx__taxonomy po-fr-tx__taxonomy--location">
+
+                                
+
+                            </ul>
+
+
+
+
+
+                            <ul class="po-fr-tx__taxonomy po-fr-tx__taxonomy--category">
+
+                              
+                            </ul>
+
+
+                        </div>
+
+                    </section>
+
+                </footer>
+
+
+            </div>
+
+        </div>
+
+
+
+
+
+        <div id="post-print">
+            <transition name="fadein">
+                <aside class="po-pr prt-x" v-cloak v-if="printActive">
+                    <a class="po-pr__close" v-on:click="closePanel">
+
+                        <svg class="po-pr__icon" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">=
+                            <title>Remove Icon</title>
+                            <line x1="7.17" x2="42.83" y1="7.17" y2="42.83"></line>
+                            <line x1="42.83" x2="7.17" y1="7.17" y2="42.83"></line>
+                        </svg>
+                        ESC
+                    </a>
+                    <div class="po-pr__container">
+                        <header class="po-pr__header">
+                            <h1 class="po-pr__heading">Select a text size</h1>
+                        </header>
+                        <div class="po-pr__main">
+                            <div class="po-pr__item">
+                                <h2 class="po-pr__subheading">
+                                    <a class="po-pr__button" v-on:click="setPrintSize('print-small')">
+                                        Small
+                                    </a>
+                                </h2>
+                                <div class="po-pr__text po-pr__text--s">
+                                    <p>In the weeks before Puerto Ricans rose up and took down governor Ricardo Rosselló this summer, educators on the island banded together to defeat a corrupt deal that would have destroyed their pensions. Now they’re organizing against a new version of the same rotten plan. The fight begs a basic question: Why is the American [&hellip;]</p>
+
+                                </div>
+                            </div>
+                            <div class="po-pr__item">
+                                <h2 class="po-pr__subheading">
+                                    <a class="po-pr__button" v-on:click="setPrintSize('print-medium')">
+                                        Medium
+                                    </a>
+                                </h2>
+                                <div class="po-pr__text po-pr__text--m">
+                                    <p>In the weeks before Puerto Ricans rose up and took down governor Ricardo Rosselló this summer, educators on the island banded together to defeat a corrupt deal that would have destroyed their pensions. Now they’re organizing against a new version of the same rotten plan. The fight begs a basic question: Why is the American [&hellip;]</p>
+
+                                </div>
+                            </div>
+                            <div class="po-pr__item">
+                                <h2 class="po-pr__subheading">
+                                    <a class="po-pr__button" v-on:click="setPrintSize('print-large')">
+                                        Large
+                                    </a>
+                                </h2>
+                                <div class="po-pr__text po-pr__text--l">
+                                    <p>In the weeks before Puerto Ricans rose up and took down governor Ricardo Rosselló this summer, educators on the island banded together to defeat a corrupt deal that would have destroyed their pensions. Now they’re organizing against a new version of the same rotten plan. The fight begs a basic question: Why is the American [&hellip;]</p>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </transition>
+        </div>
+
+
+    </article>
+
+
+
+
+
+    <div class="sr-at" style="display:none">
+        <aside class="sr-at__slot sr-at__slot--left prt-x">
+            <!-- /21690955159/jac_posts -->
+            <div id="div-gpt-ad-1530207829426-1">
+                <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+                googletag.cmd.push(function() { googletag.display('div-gpt-ad-1530207829426-1'); });
+            </script>
+            </div>
+        </aside>
+        <aside class="sr-at__slot sr-at__slot--left prt-x">
+            <!-- /21690955159/jac_posts2 -->
+            <div id="div-gpt-ad-1530207829426-2">
+                <script>
+                    googletag.cmd.push(function() { googletag.display('div-gpt-ad-1530207829426-2'); });
+                </script>
+            </div>
+        </aside>
+        <aside class="sr-at__slot sr-at__slot--left prt-x">
+            <!-- /21690955159/jac_posts3 -->
+            <div id="div-gpt-ad-1530207829426-3">
+                <script>
+                    googletag.cmd.push(function() { googletag.display('div-gpt-ad-1530207829426-3'); });
+                </script>
+            </div>
+        </aside>
+        <aside class="sr-at__slot sr-at__slot--left prt-x">
+            <!-- /21690955159/jac_posts4 -->
+            <div id="div-gpt-ad-1530207829426-4">
+                <script>
+                    googletag.cmd.push(function() { googletag.display('div-gpt-ad-1530207829426-4'); });
+                </script>
+            </div>
+        </aside>
+    </div>
+
+
+</main>
+
+
+<footer class="si-fr prt-x">
+
+    <section class="si-fr-ml" id="mailing-list-signup">
+        <h1 class="si-fr-ml__heading">Sign up for our mailing list</h1>
+        <form class="si-fr-ml__form" v-on:submit.prevent="signup">
+            <div class="si-fr-ml__formbox">
+                <input class="si-fr-ml__field" name="email" placeholder="Email Address Here" v-model="email"/>
+                <button class="si-fr-ml__submit" v-bind:disabled="querying">
+                    <span>Submit</span>
+                </button>
+                <p class="si-fr-ml__message" v-cloak v-if="state === 'failure'">This doesn't appear to be a valid email.</p>
+                <p class="si-fr-ml__message" v-cloak v-if="state === 'success'">Thanks for signing up!</p>
+            </div>
+        </form>
+    </section>
+
+    <a class="si-fr__frame" href="/">
+
+    </a>
+
+
+
+</footer>
+
+
+
+
+<script src="https://js.stripe.com/v3/"></script>
+<script src="/static/1569970862/js/jacobin.js" type="text/javascript"></script>
+
+
+</body>
+
+</html>
